@@ -2,6 +2,7 @@ package com.example.dentalappointmentsystem.entities;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.sql.Date;
 import java.sql.Time;
@@ -9,6 +10,7 @@ import java.sql.Time;
 @Data
 @Entity
 @Table(name = "appointments")
+@NoArgsConstructor
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
