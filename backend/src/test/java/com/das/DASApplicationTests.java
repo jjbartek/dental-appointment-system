@@ -1,10 +1,10 @@
-package com.example.dentalappointmentsystem;
+package com.das;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class DentalAppointmentSystemApplicationTests {
+class DASApplicationTests {
 
     @Test
     void contextLoads() {

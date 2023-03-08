@@ -1,23 +1,20 @@
-package com.example.dentalappointmentsystem.entities;
+package com.das.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @Entity
-@Table(name = "services")
+@Table(name = "statuses")
 @NoArgsConstructor
-public class Service {
+@AllArgsConstructor
+public class Status {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "service_name")
+    @Column(name = "status_name")
     private String name;
-
-    @Column(name = "min_price")
-    private Integer minPrice;
-
-    private Integer duration;
 }

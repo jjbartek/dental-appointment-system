@@ -1,6 +1,7 @@
-package com.example.dentalappointmentsystem.entities;
+package com.das.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.sql.Time;
 @Entity
 @Table(name = "appointments")
 @NoArgsConstructor
+@AllArgsConstructor
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,6 +30,7 @@ public class Appointment {
     @JoinColumn(name = "service_id")
     private Service service;
 
+    @Column
     private float total;
 
     @Column(name = "a_date")
@@ -36,6 +39,7 @@ public class Appointment {
     @Column(name = "a_time")
     private Time time;
 
+    @Column
     private String notes;
 
 }
