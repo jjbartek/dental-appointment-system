@@ -33,9 +33,6 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @Column
-    private boolean enabled;
-
     @ElementCollection(targetClass = Role.class)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
@@ -46,7 +43,6 @@ public class User implements UserDetails {
         this.username = username;
         this.email = email;
         this.password = password;
-        this.enabled = enabled;
     }
 
     public void addNewRole(Role role) {
@@ -75,11 +71,16 @@ public class User implements UserDetails {
 
     @Override
     public boolean isAccountNonLocked() {
-        return enabled;
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
         return true;
     }
 }
