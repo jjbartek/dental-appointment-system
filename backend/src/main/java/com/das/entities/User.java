@@ -24,8 +24,8 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column
-    private String username;
+    @Column(name = "username")
+    private String name;
 
     @Column
     private String email;
@@ -33,14 +33,14 @@ public class User implements UserDetails {
     @Column
     private String password;
 
-    @ElementCollection(targetClass = Role.class)
+    @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
     @Enumerated(EnumType.STRING)
     @Column(name = "role")
     private List<Role> roles = new ArrayList<>();
 
-    public User(String username, String email, String password, boolean enabled) {
-        this.username = username;
+    public User(String name, String email, String password, boolean enabled) {
+        this.name = name;
         this.email = email;
         this.password = password;
     }
@@ -62,6 +62,11 @@ public class User implements UserDetails {
             authorities.add(new SimpleGrantedAuthority(role.name()));
         }
         return authorities;
+    }
+
+    @Override
+    public String getUsername() {
+        return email;
     }
 
     @Override

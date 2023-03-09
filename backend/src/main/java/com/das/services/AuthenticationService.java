@@ -26,7 +26,7 @@ public class AuthenticationService {
 
     public AuthenticationResponse register(UserRegisterDTO userData) {
         User user = User.builder()
-                .username(userData.getUsername())
+                .name(userData.getUsername())
                 .email(userData.getEmail())
                 .password(passwordEncoder.encode(userData.getPassword()))
                 .roles(List.of(Role.EMPLOYEE))
