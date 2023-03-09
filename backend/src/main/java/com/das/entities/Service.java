@@ -15,12 +15,12 @@ public class Service {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "service_name")
+    @Column(name = "service_name", nullable = false)
     private String name;
 
-    @Column(name = "min_price")
+    @Column(name = "min_price", nullable = false)
     private Integer minPrice;
 
-    @Column
+    @Column(nullable = false)
     private Integer duration;
 }

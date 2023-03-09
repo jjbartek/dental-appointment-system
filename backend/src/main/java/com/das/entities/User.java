@@ -24,19 +24,19 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "username")
+    @Column(name = "username", nullable = false, unique = true)
     private String name;
 
-    @Column
+    @Column(nullable = false, unique = true)
     private String email;
 
-    @Column
+    @Column(nullable = false)
     private String password;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", nullable = false))
     @Enumerated(EnumType.STRING)
-    @Column(name = "role")
+    @Column(name = "role", nullable = false)
     private List<Role> roles = new ArrayList<>();
 
     public User(String name, String email, String password, boolean enabled) {
