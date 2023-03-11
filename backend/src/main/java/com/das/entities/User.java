@@ -1,6 +1,10 @@
 package com.das.entities;
 
+import com.das.validators.EnumValidator;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -25,18 +29,26 @@ public class User implements UserDetails {
     private Integer id;
 
     @Column(name = "username", nullable = false, unique = true)
+    @NotBlank(message = "Username cannot be empty")
+    @NotNull(message = "Username cannot be null")
     private String name;
 
     @Column(nullable = false, unique = true)
+    @NotNull(message = "Email cannot be null")
+    @Email(message = "Invalid email")
     private String email;
 
     @Column(nullable = false)
+    @NotBlank(message = "Password cannot be empty")
+    @NotNull(message = "Password cannot be null")
     private String password;
 
     @ElementCollection(targetClass = Role.class, fetch = FetchType.EAGER)
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", nullable = false))
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
+    @NotNull(message = "Role cannot be null")
+    @EnumValidator(targetClassType = Role.class, message = "Invalid role")
     private List<Role> roles = new ArrayList<>();
 
     public User(String name, String email, String password, boolean enabled) {
