@@ -1,5 +1,6 @@
 package com.das.entities;
 
+import com.das.validators.EnumValidator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -52,5 +53,11 @@ public class Appointment {
 
     @Column(columnDefinition = "TEXT")
     private String notes;
+
+    @Enumerated(EnumType.ORDINAL)
+    @Column(name = "a_status", nullable = false)
+    @NotNull(message = "Status cannot be null")
+    @EnumValidator(targetClassType = Status.class, message = "Invalid status")
+    private Status status;
 
 }
