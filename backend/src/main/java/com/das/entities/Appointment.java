@@ -25,17 +25,17 @@ public class Appointment {
 
     @ManyToOne
     @JoinColumn(name = "employee_id", nullable = false)
-    @NotNull
+    @NotNull(message = "Employee cannot be null")
     private User employee;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", nullable = false)
-    @NotNull
+    @NotNull(message = "Patient cannot be null")
     private Patient patient;
 
     @ManyToOne
     @JoinColumn(name = "service_id", nullable = false)
-    @NotNull
+    @NotNull(message = "Service type cannot be null")
     private Service service;
 
     @Column(columnDefinition = "DECIMAL(6, 2)")
@@ -44,11 +44,11 @@ public class Appointment {
     private BigDecimal total;
 
     @Column(name = "a_date", nullable = false)
-    @NotNull
+    @NotNull(message = "Date cannot be null")
     private Date date;
 
     @Column(name = "a_time", nullable = false)
-    @NotNull
+    @NotNull(message = "Time cannot be null")
     private Time time;
 
     @Column(columnDefinition = "TEXT")
