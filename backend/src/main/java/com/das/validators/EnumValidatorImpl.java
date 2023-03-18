@@ -7,7 +7,7 @@ import java.util.EnumSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, String> {
+public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Object> {
     private Set<String> allowedValues;
 
     @SuppressWarnings({ "unchecked", "rawtypes" })
@@ -19,7 +19,7 @@ public class EnumValidatorImpl implements ConstraintValidator<EnumValidator, Str
     }
 
     @Override
-    public boolean isValid(String value, ConstraintValidatorContext context) {
-        return value == null || allowedValues.contains(value);
+    public boolean isValid(Object value, ConstraintValidatorContext context) {
+        return value == null || allowedValues.contains(value.toString());
     }
 }
