@@ -1,4 +1,4 @@
-package com.das.dtos;
+package com.das.payloads;
 
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;

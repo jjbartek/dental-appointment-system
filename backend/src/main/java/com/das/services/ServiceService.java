@@ -1,6 +1,6 @@
 package com.das.services;
 
-import com.das.dtos.ServiceDTO;
+import com.das.payloads.ServiceDTO;
 import com.das.entities.Service;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.repositories.ServiceRepository;
@@ -52,8 +52,6 @@ public class ServiceService {
 
         serviceRepository.delete(service);
     }
-
-
 
     private Service getServiceOrThrow(Integer id) {
         return serviceRepository.findById(id)

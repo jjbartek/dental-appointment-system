@@ -1,8 +1,8 @@
 package com.das.controllers;
 
-import com.das.dtos.UserLoginDTO;
-import com.das.dtos.UserRegisterDTO;
-import com.das.responses.AuthenticationResponse;
+import com.das.payloads.JwtAuthRequest;
+import com.das.responses.JwtAuthResponse;
+import com.das.payloads.RegisterRequest;
 import com.das.services.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,15 +20,15 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @Valid @RequestBody UserRegisterDTO user
+    public ResponseEntity<JwtAuthResponse> register(
+            @Valid @RequestBody RegisterRequest user
     ) {
         return ResponseEntity.ok(authenticationService.register(user));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @Valid @RequestBody UserLoginDTO user
+    public ResponseEntity<JwtAuthResponse> authenticate(
+            @Valid @RequestBody JwtAuthRequest user
     ) {
         return ResponseEntity.ok(authenticationService.authenticate(user));
     }

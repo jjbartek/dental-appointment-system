@@ -1,4 +1,4 @@
-package com.das.dtos;
+package com.das.payloads;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegisterDTO {
+public class RegisterRequest {
     private String username;
     private String email;
     private String password;

@@ -1,11 +1,11 @@
 package com.das.services;
 
-import com.das.dtos.UserLoginDTO;
-import com.das.dtos.UserRegisterDTO;
 import com.das.entities.Role;
 import com.das.entities.User;
+import com.das.payloads.JwtAuthRequest;
+import com.das.responses.JwtAuthResponse;
+import com.das.payloads.RegisterRequest;
 import com.das.repositories.UserRepository;
-import com.das.responses.AuthenticationResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -24,7 +24,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-    public AuthenticationResponse register(UserRegisterDTO userData) {
+    public JwtAuthResponse register(RegisterRequest userData) {
         User user = User.builder()
                 .name(userData.getUsername())
                 .email(userData.getEmail())
@@ -34,12 +34,12 @@ public class AuthenticationService {
 
         userRepository.save(user);
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return JwtAuthResponse.builder()
                 .token(jwtToken)
                 .build();
     }
 
-    public AuthenticationResponse authenticate(UserLoginDTO userData) {
+    public JwtAuthResponse authenticate(JwtAuthRequest userData) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         userData.getEmail(),
@@ -51,7 +51,7 @@ public class AuthenticationService {
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
 
         String jwtToken = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        return JwtAuthResponse.builder()
                 .token(jwtToken)
                 .build();
     }

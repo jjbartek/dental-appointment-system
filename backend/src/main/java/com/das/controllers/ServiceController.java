@@ -1,6 +1,6 @@
 package com.das.controllers;
 
-import com.das.dtos.ServiceDTO;
+import com.das.payloads.ServiceDTO;
 import com.das.services.ServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

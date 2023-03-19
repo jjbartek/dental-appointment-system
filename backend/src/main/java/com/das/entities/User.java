@@ -52,20 +52,10 @@ public class User implements UserDetails {
     @NotEmpty(message = "Role list cannot be empty")
     private List<@NotNull @EnumValidator(targetClassType = Role.class, message = "Invalid role") Role> roles = new ArrayList<>();
 
-    public User(String name, String email, String password, boolean enabled) {
+    public User(String name, String email, String password) {
         this.name = name;
         this.email = email;
         this.password = password;
-    }
-
-    public void addNewRole(Role role) {
-        if(!roles.contains(role)) {
-            roles.add(role);
-        }
-    }
-
-    public void removeRole(Role role) {
-        roles.remove(role);
     }
 
     @Override
