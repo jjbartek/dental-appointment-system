@@ -1,6 +1,6 @@
 package com.das.controllers;
 
-import com.das.payloads.ServiceDTO;
+import com.das.entities.Service;
 import com.das.services.ServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,22 +17,22 @@ public class ServiceController {
     private final ServiceService serviceService;
 
     @GetMapping("{id}")
-    public ResponseEntity<ServiceDTO> getService(@PathVariable("id") Integer id) {
+    public ResponseEntity<Service> getService(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(serviceService.getService(id), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<List<ServiceDTO>> getServices() {
+    public ResponseEntity<List<Service>> getServices() {
         return new ResponseEntity<>(serviceService.getServices(), HttpStatus.OK);
     }
 
     @PostMapping
-    public ResponseEntity<ServiceDTO> createService(@Valid @RequestBody ServiceDTO service) {
+    public ResponseEntity<Service> createService(@Valid @RequestBody Service service) {
         return new ResponseEntity<>(serviceService.addService(service), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<ServiceDTO> updateService(@PathVariable Integer id, @Valid @RequestBody ServiceDTO service) {
+    public ResponseEntity<Service> updateService(@PathVariable Integer id, @Valid @RequestBody Service service) {
         return new ResponseEntity<>(serviceService.updateService(id, service), HttpStatus.OK);
     }
 
