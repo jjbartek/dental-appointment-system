@@ -3,6 +3,7 @@ package com.das.services;
 import com.das.entities.Service;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.repositories.ServiceRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 
 import java.util.List;
@@ -25,6 +26,7 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
+    @Transactional
     public Service updateService(Integer id, Service updatedService) {
         Service service = getServiceOrThrow(id);
 
@@ -34,6 +36,8 @@ public class ServiceService {
 
         return serviceRepository.save(service);
     }
+
+    @Transactional
     public void deleteService(Integer id) {
         Service service = getServiceOrThrow(id);
 

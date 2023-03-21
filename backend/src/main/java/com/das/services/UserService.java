@@ -7,6 +7,7 @@ import com.das.payloads.UserDTO;
 import com.das.payloads.UserUpdateDTO;
 import com.das.repositories.UserRepository;
 import com.das.responses.UserResponse;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
@@ -38,6 +39,7 @@ public class UserService {
         return getResponseFromPage(page);
     }
 
+    @Transactional
     public UserDTO addUser(UserCreateDTO userCreateDTO) {
         User user = modelMapper.map(userCreateDTO, User.class);
         user = userRepository.save(user);
@@ -45,6 +47,7 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    @Transactional
     public UserDTO updateUser(Integer id, UserUpdateDTO userUpdateDTO) {
         User user = getUserOrThrow(id);
 
@@ -62,6 +65,7 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
+    @Transactional
     public void deleteUser(Integer id) {
         User user = getUserOrThrow(id);
         userRepository.delete(user);
