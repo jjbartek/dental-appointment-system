@@ -1,14 +1,13 @@
 package com.das.controllers;
 
 import com.das.entities.Service;
+import com.das.responses.ServiceResponse;
 import com.das.services.ServiceService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/services")
@@ -22,8 +21,9 @@ public class ServiceController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Service>> getServices() {
-        return new ResponseEntity<>(serviceService.getServices(), HttpStatus.OK);
+    public ResponseEntity<ServiceResponse> getServices() {
+        ServiceResponse response = new ServiceResponse(serviceService.getServices());
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping

@@ -6,7 +6,7 @@ import com.das.payloads.UserCreateDTO;
 import com.das.payloads.UserDTO;
 import com.das.payloads.UserUpdateDTO;
 import com.das.repositories.UserRepository;
-import com.das.responses.UserResponse;
+import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
@@ -25,14 +25,14 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public UserResponse getUsers(Integer pageNumber, Integer pageSize) {
+    public CollectionResponse<UserDTO> getUsers(Integer pageNumber, Integer pageSize) {
         Pageable p = PageRequest.of(pageNumber, pageSize);
         Page<User> page = userRepository.findAll(p);
 
         return getResponseFromPage(page);
     }
 
-    public UserResponse getUserByNameOrEmail(String nameOrEmail, Integer pageNumber, Integer pageSize) {
+    public CollectionResponse<UserDTO> getUserByNameOrEmail(String nameOrEmail, Integer pageNumber, Integer pageSize) {
         Pageable p = PageRequest.of(pageNumber, pageSize);
         Page<User> page = userRepository.findByEmailOrName(nameOrEmail, nameOrEmail, p);
 
@@ -76,12 +76,12 @@ public class UserService {
         return modelMapper.map(user, UserDTO.class);
     }
 
-    private UserResponse getResponseFromPage(Page<User> page) {
+    private CollectionResponse<UserDTO> getResponseFromPage(Page<User> page) {
         List<UserDTO> users = page.stream()
                 .map(user -> modelMapper.map(user, UserDTO.class))
                 .toList();
 
-        return UserResponse.builder()
+        return CollectionResponse.<UserDTO>builder()
                 .content(users)
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())

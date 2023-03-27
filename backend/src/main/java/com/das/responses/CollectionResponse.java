@@ -1,6 +1,5 @@
 package com.das.responses;
 
-import com.das.payloads.UserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,8 +11,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserResponse {
-    private List<UserDTO> content;
+public class CollectionResponse<T> {
+    private List<T> content;
     private int pageNumber;
     private int pageSize;
     private long totalElements;

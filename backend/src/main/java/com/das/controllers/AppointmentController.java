@@ -2,7 +2,7 @@ package com.das.controllers;
 
 import com.das.config.AppConstants;
 import com.das.entities.Appointment;
-import com.das.responses.AppointmentResponse;
+import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -20,12 +20,12 @@ public class AppointmentController {
     private final AppointmentService appointmentService;
 
     @GetMapping
-    public ResponseEntity<AppointmentResponse> getAppointments(
+    public ResponseEntity<CollectionResponse<Appointment>> getAppointments(
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(value = "date", required = false) Date date,
             @RequestParam(value = "time", required = false) Time time) {
-        AppointmentResponse response = appointmentService.getAppointments(pageNumber, pageSize, date, time);
+        CollectionResponse<Appointment> response = appointmentService.getAppointments(pageNumber, pageSize, date, time);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

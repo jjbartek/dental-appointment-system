@@ -58,6 +58,10 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public boolean hasRole(Role role) {
+        return roles.contains(role);
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         ArrayList<SimpleGrantedAuthority> authorities = new ArrayList<>();

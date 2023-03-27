@@ -1,11 +1,11 @@
 package com.das.controllers;
 
 import com.das.config.AppConstants;
+import com.das.entities.Appointment;
 import com.das.payloads.UserCreateDTO;
 import com.das.payloads.UserDTO;
 import com.das.payloads.UserUpdateDTO;
-import com.das.responses.AppointmentResponse;
-import com.das.responses.UserResponse;
+import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import com.das.services.UserService;
 import jakarta.validation.Valid;
@@ -30,7 +30,7 @@ public class UserController {
     }
 
     @GetMapping("search/{nameOrEmail}")
-    public ResponseEntity<UserResponse> getUserByNameOrEmail(
+    public ResponseEntity<CollectionResponse<UserDTO>> getUserByNameOrEmail(
             @PathVariable String nameOrEmail,
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
@@ -38,7 +38,7 @@ public class UserController {
     }
 
     @GetMapping
-    public ResponseEntity<UserResponse> getUsers(
+    public ResponseEntity<CollectionResponse<UserDTO>> getUsers(
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
         return new ResponseEntity<>(userService.getUsers(pageNumber, pageSize), HttpStatus.OK);
@@ -61,13 +61,13 @@ public class UserController {
     }
 
     @GetMapping("{id}/appointments")
-    public ResponseEntity<AppointmentResponse> getEmployeeAppointments(
+    public ResponseEntity<CollectionResponse<Appointment>> getEmployeeAppointments(
             @PathVariable Integer id,
             @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
             @RequestParam(value = "date", required = false) Date date,
             @RequestParam(value = "time", required = false) Time time) {
-        AppointmentResponse response = appointmentService.getAppointmentsByEmployeeId(id, pageNumber, pageSize, date, time);
+        CollectionResponse<Appointment> response = appointmentService.getAppointmentsByEmployeeId(id, pageNumber, pageSize, date, time);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
