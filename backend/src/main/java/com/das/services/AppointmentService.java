@@ -2,54 +2,62 @@ package com.das.services;
 
 import com.das.entities.Appointment;
 import com.das.entities.Role;
-import com.das.entities.Status;
 import com.das.exceptions.AppointmentTimeNotAvailable;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.exceptions.UserDoesNotHavePrivilegeException;
 import com.das.repositories.AppointmentRepository;
-import com.das.repositories.UserRepository;
+import com.das.repositories.PatientRepository;
 import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.sql.Date;
-import java.sql.Time;
-import java.time.LocalTime;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
-    private final UserRepository userRepository;
+    private final PatientRepository patientRepository;
 
-    public CollectionResponse<Appointment> getAppointmentsByEmployeeId(Integer id, Integer pageNumber, Integer pageSize, Date date, Time time) {
-        fillDateAndTimeIfNull(date, time);
+    public CollectionResponse<Appointment> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+        if(dateTime == null) dateTime = LocalDateTime.now();
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Appointment> page = appointmentRepository.findByDateAndTimeAndEmployeeId(date, time, id, pageable);
-
-        return buildAppointmentResponse(page);
-    }
-
-    public CollectionResponse<Appointment> getAppointmentsByPatientId(Integer id, Integer pageNumber, Integer pageSize, Date date, Time time) {
-        fillDateAndTimeIfNull(date, time);
-
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Appointment> page = appointmentRepository.findByDateAndTimeAndPatientId(date, time, id, pageable);
+        Page<Appointment> page;
+        if(showPreceding) {
+            page = appointmentRepository.findByPreTimeAndEmployeeId(dateTime, id, pageable);
+        } else {
+            page = appointmentRepository.findByPostTimeAndEmployeeId(dateTime, id, pageable);
+        }
 
         return buildAppointmentResponse(page);
     }
 
-    public CollectionResponse<Appointment> getAppointments(Integer pageNumber, Integer pageSize, Date date, Time time) {
-        fillDateAndTimeIfNull(date, time);
+    public CollectionResponse<Appointment> getAppointmentsByPatientId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+        if(dateTime == null) dateTime = LocalDateTime.now();
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize);
-        Page<Appointment> page = appointmentRepository.findByDateAndTime(date, time, pageable);
+        Page<Appointment> page;
+        if(showPreceding) {
+            page = appointmentRepository.findByPreTimeAndPatientId(dateTime, id, pageable);
+        } else {
+            page = appointmentRepository.findByPostTimeAndPatientId(dateTime, id, pageable);
+        }
+
+        return buildAppointmentResponse(page);
+    }
+
+    public CollectionResponse<Appointment> getAppointments(LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+        if(dateTime == null) dateTime = LocalDateTime.now();
+
+        Page<Appointment> page;
+        if(showPreceding) {
+            page = appointmentRepository.findByPreTime(dateTime, pageable);
+        } else {
+            page = appointmentRepository.findByPostTime(dateTime, pageable);
+        }
 
         return buildAppointmentResponse(page);
     }
@@ -65,10 +73,11 @@ public class AppointmentService {
         if(!appointment.getEmployee().hasRole(Role.EMPLOYEE))
             throw new UserDoesNotHavePrivilegeException(appointment.getEmployee().getId(), "carry out services");
 
-            // Validate that patient exists
+        if(!patientRepository.existsById(appointment.getPatient().getId()))
+            throw new ResourceNotFoundException("Patient", "patient id", appointment.getPatient().getId());
 
         if(isAppointmentTimeNotAvailable(appointment))
-            throw new AppointmentTimeNotAvailable(appointment.getDate(), appointment.getTime());
+            throw new AppointmentTimeNotAvailable(appointment.getStartTime());
 
         return appointmentRepository.save(appointment);
     }
@@ -80,14 +89,14 @@ public class AppointmentService {
             throw new UserDoesNotHavePrivilegeException(appointment.getEmployee().getId(), "carry out services");
 
         if(isAppointmentTimeNotAvailable(updatedAppointment))
-            throw new AppointmentTimeNotAvailable(updatedAppointment.getDate(), updatedAppointment.getTime());
+            throw new AppointmentTimeNotAvailable(appointment.getStartTime());
 
         appointment.setEmployee(updatedAppointment.getEmployee());
         appointment.setPatient(updatedAppointment.getPatient());
         appointment.setService(updatedAppointment.getService());
         appointment.setTotal(updatedAppointment.getTotal());
-        appointment.setDate(updatedAppointment.getDate());
-        appointment.setTime(updatedAppointment.getTime());
+        appointment.setStartTime(updatedAppointment.getStartTime());
+        appointment.setEndTime(updatedAppointment.getEndTime());
         appointment.setNotes(updatedAppointment.getNotes());
         appointment.setStatus(updatedAppointment.getStatus());
 
@@ -105,45 +114,13 @@ public class AppointmentService {
     }
 
     private boolean isAppointmentTimeNotAvailable(Appointment appointment) {
-        //find previous
-        Optional<Appointment> optionalPrevAppointment = appointmentRepository.findFirstByDateAndTimeBeforeAndEmployeeIdOrderByTimeDesc(
-                appointment.getDate(),
-                appointment.getTime(),
+        List<Appointment> interferingAppointments = appointmentRepository.findByTimeBetweenAndEmployeeId(
+                appointment.getStartTime(),
+                appointment.getEndTime(),
                 appointment.getEmployee().getId()
         );
 
-        if (optionalPrevAppointment.isPresent()) {
-            Appointment prevAppointment = optionalPrevAppointment.get();
-            LocalTime prevAppointmentLocalTime = prevAppointment.getTime().toLocalTime();
-            LocalTime prevAppointmentEndTime = prevAppointmentLocalTime.plusMinutes(prevAppointment.getService().getDuration());
-            // previous appointment ends during requested
-            if (prevAppointmentEndTime.isAfter(appointment.getTime().toLocalTime())
-                    && !prevAppointment.getId().equals(appointment.getId())
-                    && !prevAppointment.getStatus().equals(Status.CANCELED)) {
-                return true;
-            }
-        }
-
-        Time endTime = Time.valueOf(appointment.getTime().toLocalTime().plusMinutes(appointment.getService().getDuration()));
-        Optional<Appointment> optionalNextAppointment = appointmentRepository.findFirstByDateAndTimeBetweenAndEmployeeIdOrderByTimeAsc(
-                appointment.getDate(),
-                appointment.getTime(),
-                endTime,
-                appointment.getEmployee().getId()
-        );
-
-        if (optionalNextAppointment.isPresent()) {
-            Appointment nextAppointment = optionalNextAppointment.get();
-            LocalTime requestedAppointmentLocalTime = appointment.getTime().toLocalTime();
-            LocalTime requestedAppointmentEndTime = requestedAppointmentLocalTime.plusMinutes(appointment.getService().getDuration());
-
-            // next appointment starts before requested ends
-            return requestedAppointmentEndTime.isAfter(nextAppointment.getTime().toLocalTime())
-                    && !nextAppointment.getId().equals(appointment.getId())
-                    && !nextAppointment.getStatus().equals(Status.CANCELED);
-        }
-
-        return false;
+        return interferingAppointments.size() > 0 && !interferingAppointments.get(0).getId().equals(appointment.getId());
     }
 
     private CollectionResponse<Appointment> buildAppointmentResponse(Page<Appointment> page) {
@@ -155,10 +132,5 @@ public class AppointmentService {
                 .totalPages(page.getTotalPages())
                 .lastPage(page.isLast())
                 .build();
-    }
-
-    private void fillDateAndTimeIfNull(Date date, Time time) {
-        if (date == null) date = new Date(System.currentTimeMillis());
-        if (time == null) time = new Time(System.currentTimeMillis());
     }
 }

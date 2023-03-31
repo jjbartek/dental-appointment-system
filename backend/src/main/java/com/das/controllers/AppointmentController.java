@@ -1,17 +1,17 @@
 package com.das.controllers;
 
-import com.das.config.AppConstants;
 import com.das.entities.Appointment;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/appointments")
@@ -21,11 +21,10 @@ public class AppointmentController {
 
     @GetMapping
     public ResponseEntity<CollectionResponse<Appointment>> getAppointments(
-            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(value = "date", required = false) Date date,
-            @RequestParam(value = "time", required = false) Time time) {
-        CollectionResponse<Appointment> response = appointmentService.getAppointments(pageNumber, pageSize, date, time);
+            @RequestParam(value = "dateTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
+            @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
+            Pageable pageable) {
+        CollectionResponse<Appointment> response = appointmentService.getAppointments(dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

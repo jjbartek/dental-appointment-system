@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -12,8 +13,8 @@ public class AppointmentTimeNotAvailable extends RuntimeException {
     Date date;
     Time time;
 
-    public AppointmentTimeNotAvailable(Date date, Time time) {
-        super("Requested appointment time (" + date.toLocalDate() + " " + time.toLocalTime() + ") has already been taken");
+    public AppointmentTimeNotAvailable(LocalDateTime dateTime) {
+        super("Requested appointment time (" + dateTime + ") is not available");
         this.date = date;
         this.time = time;
     }

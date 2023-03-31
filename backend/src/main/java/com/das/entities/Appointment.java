@@ -1,6 +1,8 @@
 package com.das.entities;
 
+import com.das.config.AppConstants;
 import com.das.validators.EnumValidator;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
@@ -10,8 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @Data
 @Entity
@@ -43,13 +44,15 @@ public class Appointment {
     @Digits(integer = 4, fraction = 2)
     private BigDecimal total;
 
-    @Column(name = "a_date", nullable = false)
-    @NotNull(message = "Date cannot be null")
-    private Date date;
+    @Column(name = "startTime", nullable = false, columnDefinition = "TIMESTAMP")
+    @NotNull(message = "Start time cannot be null")
+    @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
+    private LocalDateTime startTime;
 
-    @Column(name = "a_time", nullable = false)
-    @NotNull(message = "Time cannot be null")
-    private Time time;
+    @Column(name = "endTime", nullable = false, columnDefinition = "TIMESTAMP")
+    @NotNull(message = "End time cannot be null")
+    @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
+    private LocalDateTime endTime;
 
     @Column(columnDefinition = "TEXT")
     private String notes;

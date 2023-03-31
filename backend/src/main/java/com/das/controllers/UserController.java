@@ -10,12 +10,12 @@ import com.das.services.AppointmentService;
 import com.das.services.UserService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
-import java.sql.Time;
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -63,11 +63,10 @@ public class UserController {
     @GetMapping("{id}/appointments")
     public ResponseEntity<CollectionResponse<Appointment>> getEmployeeAppointments(
             @PathVariable Integer id,
-            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(value = "date", required = false) Date date,
-            @RequestParam(value = "time", required = false) Time time) {
-        CollectionResponse<Appointment> response = appointmentService.getAppointmentsByEmployeeId(id, pageNumber, pageSize, date, time);
+            @RequestParam(value = "dateTime", required = false) LocalDateTime dateTime,
+            @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
+            Pageable pageable) {
+        CollectionResponse<Appointment> response = appointmentService.getAppointmentsByEmployeeId(id, dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
