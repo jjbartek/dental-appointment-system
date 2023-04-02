@@ -1,6 +1,5 @@
 package com.das.entities;
 
-import com.das.validators.EnumValidator;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -50,7 +49,7 @@ public class User implements UserDetails {
     @Column(name = "role", nullable = false)
     @NotNull(message = "Role list cannot be null")
     @NotEmpty(message = "Role list cannot be empty")
-    private List<@NotNull @EnumValidator(targetClassType = Role.class, message = "Invalid role") Role> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 
     public User(String name, String email, String password) {
         this.name = name;

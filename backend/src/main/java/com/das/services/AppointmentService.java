@@ -93,8 +93,7 @@ public class AppointmentService {
 
         appointment.setEmployee(updatedAppointment.getEmployee());
         appointment.setPatient(updatedAppointment.getPatient());
-        appointment.setService(updatedAppointment.getService());
-        appointment.setTotal(updatedAppointment.getTotal());
+        appointment.setServices(updatedAppointment.getServices());
         appointment.setStartTime(updatedAppointment.getStartTime());
         appointment.setEndTime(updatedAppointment.getEndTime());
         appointment.setNotes(updatedAppointment.getNotes());

@@ -1,18 +1,16 @@
 package com.das.entities;
 
 import com.das.config.AppConstants;
-import com.das.validators.EnumValidator;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Digits;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @Entity
@@ -34,16 +32,6 @@ public class Appointment {
     @NotNull(message = "Patient cannot be null")
     private Patient patient;
 
-    @ManyToOne
-    @JoinColumn(name = "service_id", nullable = false)
-    @NotNull(message = "Service type cannot be null")
-    private Service service;
-
-    @Column(columnDefinition = "DECIMAL(6, 2)")
-    @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer = 4, fraction = 2)
-    private BigDecimal total;
-
     @Column(name = "startTime", nullable = false, columnDefinition = "TIMESTAMP")
     @NotNull(message = "Start time cannot be null")
     @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
@@ -60,7 +48,16 @@ public class Appointment {
     @Enumerated(EnumType.ORDINAL)
     @Column(name = "a_status", nullable = false)
     @NotNull(message = "Status cannot be null")
-    @EnumValidator(targetClassType = Status.class, message = "Invalid status")
     private Status status;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "appointments_services",
+            joinColumns = @JoinColumn(name = "appointment_id"),
+            inverseJoinColumns = @JoinColumn(name = "service_id")
+    )
+    @NotNull(message = "List of services cannot be null")
+    @NotEmpty(message = "List of services must have at least one service")
+    private List<Service> services;
 
 }

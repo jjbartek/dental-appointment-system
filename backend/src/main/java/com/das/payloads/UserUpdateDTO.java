@@ -1,7 +1,6 @@
 package com.das.payloads;
 
 import com.das.entities.Role;
-import com.das.validators.EnumValidator;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -28,6 +27,6 @@ public class UserUpdateDTO {
 
     @NotNull(message = "Role list cannot be null")
     @NotEmpty(message = "Role list cannot be empty")
-    private List<@NotNull @EnumValidator(targetClassType = Role.class, message = "Invalid role") Role> roles;
+    private List<Role> roles;
 
 }
