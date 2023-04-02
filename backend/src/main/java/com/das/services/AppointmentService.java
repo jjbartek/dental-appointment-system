@@ -1,12 +1,17 @@
 package com.das.services;
 
 import com.das.entities.Appointment;
+import com.das.entities.Patient;
 import com.das.entities.Role;
+import com.das.entities.User;
 import com.das.exceptions.AppointmentTimeNotAvailable;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.exceptions.UserDoesNotHavePrivilegeException;
+import com.das.payloads.AppointmentRequest;
 import com.das.repositories.AppointmentRepository;
 import com.das.repositories.PatientRepository;
+import com.das.repositories.ServiceRepository;
+import com.das.repositories.UserRepository;
 import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +20,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,6 +28,8 @@ import java.util.List;
 public class AppointmentService {
     private final AppointmentRepository appointmentRepository;
     private final PatientRepository patientRepository;
+    private final ServiceRepository serviceRepository;
+    private final UserRepository userRepository;
 
     public CollectionResponse<Appointment> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
@@ -67,40 +75,22 @@ public class AppointmentService {
     }
 
     @Transactional
-    public Appointment addAppointment(Appointment appointment) {
-        appointment.setId(null);
-
-        if(!appointment.getEmployee().hasRole(Role.EMPLOYEE))
-            throw new UserDoesNotHavePrivilegeException(appointment.getEmployee().getId(), "carry out services");
-
-        if(!patientRepository.existsById(appointment.getPatient().getId()))
-            throw new ResourceNotFoundException("Patient", "patient id", appointment.getPatient().getId());
-
-        if(isAppointmentTimeNotAvailable(appointment))
-            throw new AppointmentTimeNotAvailable(appointment.getStartTime());
+    public Appointment addAppointment(AppointmentRequest appointmentRequest) {
+        Appointment appointment = new Appointment();
+        saveDataToAppointment(appointment, appointmentRequest);
 
         return appointmentRepository.save(appointment);
     }
 
-    public Appointment updateAppointment(Integer id, Appointment updatedAppointment) {
+    @Transactional
+    public Appointment updateAppointment(Integer id, AppointmentRequest appointmentRequest) {
         Appointment appointment = getAppointmentOrThrow(id);
-
-        if(!appointment.getEmployee().hasRole(Role.EMPLOYEE))
-            throw new UserDoesNotHavePrivilegeException(appointment.getEmployee().getId(), "carry out services");
-
-        if(isAppointmentTimeNotAvailable(updatedAppointment))
-            throw new AppointmentTimeNotAvailable(appointment.getStartTime());
-
-        appointment.setEmployee(updatedAppointment.getEmployee());
-        appointment.setPatient(updatedAppointment.getPatient());
-        appointment.setServices(updatedAppointment.getServices());
-        appointment.setStartTime(updatedAppointment.getStartTime());
-        appointment.setEndTime(updatedAppointment.getEndTime());
-        appointment.setNotes(updatedAppointment.getNotes());
-        appointment.setStatus(updatedAppointment.getStatus());
+        saveDataToAppointment(appointment, appointmentRequest);
 
         return appointmentRepository.save(appointment);
     }
+
+    @Transactional
     public void deleteAppointment(Integer id) {
         Appointment appointment = getAppointmentOrThrow(id);
 
@@ -132,4 +122,35 @@ public class AppointmentService {
                 .lastPage(page.isLast())
                 .build();
     }
+
+    private void saveDataToAppointment(Appointment appointment, AppointmentRequest appointmentRequest) {
+        List<com.das.entities.Service> services = new ArrayList<>();
+
+        for(Integer id : appointmentRequest.getServiceIds()) {
+            com.das.entities.Service service = serviceRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("Service", "service id", id));
+
+            services.add(service);
+        }
+
+        User employee = userRepository.findById(appointmentRequest.getEmployeeId())
+                .orElseThrow(() -> new ResourceNotFoundException("Employee", "employee id", appointmentRequest.getEmployeeId()));
+        Patient patient = patientRepository.findById(appointmentRequest.getPatientId())
+                .orElseThrow(() -> new ResourceNotFoundException("Patient", "patient id", appointmentRequest.getPatientId()));
+
+        if(!employee.hasRole(Role.EMPLOYEE))
+            throw new UserDoesNotHavePrivilegeException(employee.getId(), "carry out services");
+
+        appointment.setServices(services);
+        appointment.setEmployee(employee);
+        appointment.setPatient(patient);
+        appointment.setStartTime(appointmentRequest.getStartTime());
+        appointment.setEndTime(appointmentRequest.getEndTime());
+        appointment.setNotes(appointmentRequest.getNotes());
+        appointment.setStatus(appointmentRequest.getStatus());
+
+        if(isAppointmentTimeNotAvailable(appointment))
+            throw new AppointmentTimeNotAvailable(appointment.getStartTime());
+    }
+
 }

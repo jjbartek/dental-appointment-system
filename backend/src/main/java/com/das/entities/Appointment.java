@@ -3,12 +3,15 @@ package com.das.entities;
 import com.das.config.AppConstants;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.DecimalMin;
+import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -32,12 +35,12 @@ public class Appointment {
     @NotNull(message = "Patient cannot be null")
     private Patient patient;
 
-    @Column(name = "startTime", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "start_time", nullable = false, columnDefinition = "TIMESTAMP")
     @NotNull(message = "Start time cannot be null")
     @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
     private LocalDateTime startTime;
 
-    @Column(name = "endTime", nullable = false, columnDefinition = "TIMESTAMP")
+    @Column(name = "end_time", nullable = false, columnDefinition = "TIMESTAMP")
     @NotNull(message = "End time cannot be null")
     @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
     private LocalDateTime endTime;
@@ -50,7 +53,7 @@ public class Appointment {
     @NotNull(message = "Status cannot be null")
     private Status status;
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "appointments_services",
             joinColumns = @JoinColumn(name = "appointment_id"),
@@ -59,5 +62,10 @@ public class Appointment {
     @NotNull(message = "List of services cannot be null")
     @NotEmpty(message = "List of services must have at least one service")
     private List<Service> services;
+
+    @Column(columnDefinition = "DECIMAL(6, 2)")
+    @DecimalMin(value = "0.0", inclusive = false)
+    @Digits(integer = 4, fraction = 2)
+    private BigDecimal total;
 
 }

@@ -1,6 +1,7 @@
 package com.das.controllers;
 
 import com.das.entities.Appointment;
+import com.das.payloads.AppointmentRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import jakarta.validation.Valid;
@@ -34,12 +35,12 @@ public class AppointmentController {
     }
 
     @PostMapping
-    public ResponseEntity<Appointment> addAppointment(@RequestBody @Valid Appointment appointment) {
+    public ResponseEntity<Appointment> addAppointment(@RequestBody @Valid AppointmentRequest appointment) {
         return new ResponseEntity<>(appointmentService.addAppointment(appointment), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Appointment> updateAppointment(@PathVariable("id") Integer id, @RequestBody @Valid Appointment appointment) {
+    public ResponseEntity<Appointment> updateAppointment(@PathVariable("id") Integer id, @RequestBody @Valid AppointmentRequest appointment) {
         return new ResponseEntity<>(appointmentService.updateAppointment(id, appointment), HttpStatus.OK);
     }
 
