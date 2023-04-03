@@ -1,4 +1,4 @@
-package com.das.payloads;
+package com.das.requests;
 
 import com.das.entities.Role;
 import jakarta.validation.constraints.Email;
@@ -14,7 +14,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserUpdateDTO {
+public class UserCreateRequest {
     @NotBlank(message = "Username cannot be empty")
     @NotNull(message = "Username cannot be null")
     private String name;
@@ -23,6 +23,8 @@ public class UserUpdateDTO {
     @Email(message = "Invalid email")
     private String email;
 
+    @NotBlank(message = "Password cannot be empty")
+    @NotNull(message = "Password cannot be null")
     private String password;
 
     @NotNull(message = "Role list cannot be null")

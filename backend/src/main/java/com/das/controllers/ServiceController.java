@@ -1,6 +1,7 @@
 package com.das.controllers;
 
 import com.das.entities.Service;
+import com.das.requests.ServiceRequest;
 import com.das.responses.ServiceResponse;
 import com.das.services.ServiceService;
 import jakarta.validation.Valid;
@@ -27,13 +28,13 @@ public class ServiceController {
     }
 
     @PostMapping
-    public ResponseEntity<Service> createService(@Valid @RequestBody Service service) {
-        return new ResponseEntity<>(serviceService.addService(service), HttpStatus.CREATED);
+    public ResponseEntity<Service> createService(@Valid @RequestBody ServiceRequest serviceRequest) {
+        return new ResponseEntity<>(serviceService.addService(serviceRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Service> updateService(@PathVariable Integer id, @Valid @RequestBody Service service) {
-        return new ResponseEntity<>(serviceService.updateService(id, service), HttpStatus.OK);
+    public ResponseEntity<Service> updateService(@PathVariable Integer id, @Valid @RequestBody ServiceRequest serviceRequest) {
+        return new ResponseEntity<>(serviceService.updateService(id, serviceRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")

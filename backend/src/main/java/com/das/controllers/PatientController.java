@@ -1,7 +1,9 @@
 package com.das.controllers;
 
-import com.das.entities.Appointment;
+import com.das.DTOs.AppointmentDTO;
 import com.das.entities.Patient;
+import com.das.requests.PatientRequest;
+import com.das.requests.ServiceRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import com.das.services.PatientService;
@@ -33,13 +35,13 @@ public class PatientController {
     }
 
     @PostMapping
-    public ResponseEntity<Patient> createPatient(@Valid @RequestBody Patient service) {
-        return new ResponseEntity<>(patientService.addPatient(service), HttpStatus.CREATED);
+    public ResponseEntity<Patient> createPatient(@Valid @RequestBody PatientRequest patientRequest) {
+        return new ResponseEntity<>(patientService.addPatient(patientRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Integer id, @Valid @RequestBody Patient service) {
-        return new ResponseEntity<>(patientService.updatePatient(id, service), HttpStatus.OK);
+    public ResponseEntity<Patient> updatePatient(@PathVariable Integer id, @Valid @RequestBody PatientRequest patientRequest) {
+        return new ResponseEntity<>(patientService.updatePatient(id, patientRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -49,12 +51,12 @@ public class PatientController {
     }
 
     @GetMapping("{id}/appointments")
-    public ResponseEntity<CollectionResponse<Appointment>> getEmployeeAppointments(
+    public ResponseEntity<CollectionResponse<AppointmentDTO>> getEmployeeAppointments(
             @PathVariable Integer id,
             @RequestParam(value = "dateTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
             @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
             Pageable pageable) {
-        CollectionResponse<Appointment> response = appointmentService.getAppointmentsByPatientId(id, dateTime, showPreceding, pageable);
+        CollectionResponse<AppointmentDTO> response = appointmentService.getAppointmentsByPatientId(id, dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

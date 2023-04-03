@@ -2,9 +2,9 @@ package com.das.services;
 
 import com.das.entities.User;
 import com.das.exceptions.ResourceNotFoundException;
-import com.das.payloads.UserCreateDTO;
-import com.das.payloads.UserDTO;
-import com.das.payloads.UserUpdateDTO;
+import com.das.requests.UserCreateRequest;
+import com.das.DTOs.UserDTO;
+import com.das.requests.UserUpdateRequest;
 import com.das.repositories.UserRepository;
 import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
@@ -40,23 +40,23 @@ public class UserService {
     }
 
     @Transactional
-    public UserDTO addUser(UserCreateDTO userCreateDTO) {
-        User user = modelMapper.map(userCreateDTO, User.class);
+    public UserDTO addUser(UserCreateRequest userCreateRequest) {
+        User user = modelMapper.map(userCreateRequest, User.class);
         user = userRepository.save(user);
 
         return modelMapper.map(user, UserDTO.class);
     }
 
     @Transactional
-    public UserDTO updateUser(Integer id, UserUpdateDTO userUpdateDTO) {
+    public UserDTO updateUser(Integer id, UserUpdateRequest userUpdateRequest) {
         User user = getUserOrThrow(id);
 
-        user.setName(userUpdateDTO.getName());
-        user.setEmail(userUpdateDTO.getEmail());
-        user.setRoles(userUpdateDTO.getRoles());
+        user.setName(userUpdateRequest.getName());
+        user.setEmail(userUpdateRequest.getEmail());
+        user.setRoles(userUpdateRequest.getRoles());
 
-        if (userUpdateDTO.getPassword() != null && !userUpdateDTO.getPassword().isEmpty()) {
-            user.setPassword(passwordEncoder.encode(userUpdateDTO.getPassword()));
+        if (userUpdateRequest.getPassword() != null && !userUpdateRequest.getPassword().isEmpty()) {
+            user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         }
 
         user = userRepository.save(user);

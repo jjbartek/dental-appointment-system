@@ -1,5 +1,6 @@
 package com.das.services;
 
+import com.das.DTOs.AppointmentDTO;
 import com.das.entities.Appointment;
 import com.das.entities.Patient;
 import com.das.entities.Role;
@@ -7,14 +8,15 @@ import com.das.entities.User;
 import com.das.exceptions.AppointmentTimeNotAvailable;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.exceptions.UserDoesNotHavePrivilegeException;
-import com.das.payloads.AppointmentRequest;
 import com.das.repositories.AppointmentRepository;
 import com.das.repositories.PatientRepository;
 import com.das.repositories.ServiceRepository;
 import com.das.repositories.UserRepository;
+import com.das.requests.AppointmentRequest;
 import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -30,8 +32,9 @@ public class AppointmentService {
     private final PatientRepository patientRepository;
     private final ServiceRepository serviceRepository;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
-    public CollectionResponse<Appointment> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+    public CollectionResponse<AppointmentDTO> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
         Page<Appointment> page;
@@ -44,7 +47,7 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    public CollectionResponse<Appointment> getAppointmentsByPatientId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+    public CollectionResponse<AppointmentDTO> getAppointmentsByPatientId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
         Page<Appointment> page;
@@ -57,7 +60,7 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    public CollectionResponse<Appointment> getAppointments(LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+    public CollectionResponse<AppointmentDTO> getAppointments(LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
         Page<Appointment> page;
@@ -70,24 +73,26 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    public Appointment getAppointmentById(Integer id) {
-        return getAppointmentOrThrow(id);
+    public AppointmentDTO getAppointmentById(Integer id) {
+        return modelMapper.map(getAppointmentOrThrow(id), AppointmentDTO.class);
     }
 
     @Transactional
-    public Appointment addAppointment(AppointmentRequest appointmentRequest) {
+    public AppointmentDTO addAppointment(AppointmentRequest appointmentRequest) {
         Appointment appointment = new Appointment();
         saveDataToAppointment(appointment, appointmentRequest);
+        appointmentRepository.save(appointment);
 
-        return appointmentRepository.save(appointment);
+        return modelMapper.map(appointment, AppointmentDTO.class);
     }
 
     @Transactional
-    public Appointment updateAppointment(Integer id, AppointmentRequest appointmentRequest) {
+    public AppointmentDTO updateAppointment(Integer id, AppointmentRequest appointmentRequest) {
         Appointment appointment = getAppointmentOrThrow(id);
         saveDataToAppointment(appointment, appointmentRequest);
+        appointmentRepository.save(appointment);
 
-        return appointmentRepository.save(appointment);
+        return modelMapper.map(appointment, AppointmentDTO.class);
     }
 
     @Transactional
@@ -112,9 +117,14 @@ public class AppointmentService {
         return interferingAppointments.size() > 0 && !interferingAppointments.get(0).getId().equals(appointment.getId());
     }
 
-    private CollectionResponse<Appointment> buildAppointmentResponse(Page<Appointment> page) {
-        return CollectionResponse.<Appointment>builder()
-                .content(page.getContent())
+    private CollectionResponse<AppointmentDTO> buildAppointmentResponse(Page<Appointment> page) {
+        List<AppointmentDTO> appointments = page.getContent()
+                .stream()
+                .map(appointment -> modelMapper.map(appointment, AppointmentDTO.class))
+                .toList();
+
+        return CollectionResponse.<AppointmentDTO>builder()
+                .content(appointments)
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())
                 .totalElements(page.getTotalElements())

@@ -2,9 +2,9 @@ package com.das.services;
 
 import com.das.entities.Role;
 import com.das.entities.User;
-import com.das.payloads.JwtAuthRequest;
+import com.das.requests.JwtAuthRequest;
 import com.das.responses.JwtAuthResponse;
-import com.das.payloads.RegisterRequest;
+import com.das.requests.RegisterRequest;
 import com.das.repositories.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;

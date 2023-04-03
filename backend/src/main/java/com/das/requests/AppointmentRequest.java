@@ -1,4 +1,4 @@
-package com.das.payloads;
+package com.das.requests;
 
 import com.das.entities.Status;
 import jakarta.validation.constraints.DecimalMin;
@@ -19,8 +19,6 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AppointmentRequest {
-
-    private Integer id;
 
     @NotNull(message = "Employee's id cannot be null")
     private Integer employeeId;

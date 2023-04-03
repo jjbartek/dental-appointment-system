@@ -1,10 +1,10 @@
 package com.das.controllers;
 
+import com.das.DTOs.AppointmentDTO;
+import com.das.DTOs.UserDTO;
 import com.das.config.AppConstants;
-import com.das.entities.Appointment;
-import com.das.payloads.UserCreateDTO;
-import com.das.payloads.UserDTO;
-import com.das.payloads.UserUpdateDTO;
+import com.das.requests.UserCreateRequest;
+import com.das.requests.UserUpdateRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import com.das.services.UserService;
@@ -45,13 +45,13 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> addUser(@RequestBody @Valid UserCreateDTO userCreateDTO) {
-        return new ResponseEntity<>(userService.addUser(userCreateDTO), HttpStatus.CREATED);
+    public ResponseEntity<UserDTO> addUser(@RequestBody @Valid UserCreateRequest userCreateRequest) {
+        return new ResponseEntity<>(userService.addUser(userCreateRequest), HttpStatus.CREATED);
     }
 
     @PutMapping("{id}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody @Valid UserUpdateDTO userUpdateDTO) {
-        return new ResponseEntity<>(userService.updateUser(id, userUpdateDTO), HttpStatus.OK);
+    public ResponseEntity<UserDTO> updateUser(@PathVariable Integer id, @RequestBody @Valid UserUpdateRequest userUpdateRequest) {
+        return new ResponseEntity<>(userService.updateUser(id, userUpdateRequest), HttpStatus.OK);
     }
 
     @DeleteMapping("{id}")
@@ -61,12 +61,12 @@ public class UserController {
     }
 
     @GetMapping("{id}/appointments")
-    public ResponseEntity<CollectionResponse<Appointment>> getEmployeeAppointments(
+    public ResponseEntity<CollectionResponse<AppointmentDTO>> getEmployeeAppointments(
             @PathVariable Integer id,
             @RequestParam(value = "dateTime", required = false) LocalDateTime dateTime,
             @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
             Pageable pageable) {
-        CollectionResponse<Appointment> response = appointmentService.getAppointmentsByEmployeeId(id, dateTime, showPreceding, pageable);
+        CollectionResponse<AppointmentDTO> response = appointmentService.getAppointmentsByEmployeeId(id, dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

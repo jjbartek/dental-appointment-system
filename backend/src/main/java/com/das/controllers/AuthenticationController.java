@@ -1,8 +1,8 @@
 package com.das.controllers;
 
-import com.das.payloads.JwtAuthRequest;
+import com.das.requests.JwtAuthRequest;
 import com.das.responses.JwtAuthResponse;
-import com.das.payloads.RegisterRequest;
+import com.das.requests.RegisterRequest;
 import com.das.services.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

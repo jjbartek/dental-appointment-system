@@ -3,8 +3,10 @@ package com.das.services;
 import com.das.entities.Service;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.repositories.ServiceRepository;
+import com.das.requests.ServiceRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 
 import java.util.List;
 
@@ -12,6 +14,8 @@ import java.util.List;
 @org.springframework.stereotype.Service
 public class ServiceService {
     private final ServiceRepository serviceRepository;
+    private final ModelMapper modelMapper;
+
     public Service getService(Integer id) {
         return getServiceOrThrow(id);
     }
@@ -20,19 +24,16 @@ public class ServiceService {
         return serviceRepository.findAll();
     }
 
-    public Service addService(Service service) {
-        service.setId(null);
+    public Service addService(ServiceRequest serviceRequest) {
+        Service service = modelMapper.map(serviceRequest, Service.class);
 
         return serviceRepository.save(service);
     }
 
     @Transactional
-    public Service updateService(Integer id, Service updatedService) {
+    public Service updateService(Integer id, ServiceRequest updatedService) {
         Service service = getServiceOrThrow(id);
-
-        service.setDuration(updatedService.getDuration());
-        service.setName(updatedService.getName());
-        service.setMinPrice(updatedService.getMinPrice());
+        modelMapper.map(updatedService, service);
 
         return serviceRepository.save(service);
     }

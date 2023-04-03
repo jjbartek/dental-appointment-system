@@ -3,9 +3,11 @@ package com.das.services;
 import com.das.entities.Patient;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.repositories.PatientRepository;
+import com.das.requests.PatientRequest;
 import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Service;
 @Service
 public class PatientService {
     private final PatientRepository patientRepository;
+    private final ModelMapper modelMapper;
+
     public Patient getPatient(Integer id) {
         return getPatientOrThrow(id);
     }
@@ -31,30 +35,25 @@ public class PatientService {
                 .build();
     }
 
-    public Patient addPatient(Patient service) {
-        service.setId(null);
+    public Patient addPatient(PatientRequest patientRequest) {
+        Patient patient = modelMapper.map(patientRequest, Patient.class);
 
-        return patientRepository.save(service);
+        return patientRepository.save(patient);
     }
 
     @Transactional
-    public Patient updatePatient(Integer id, Patient updatedPatient) {
-        Patient service = getPatientOrThrow(id);
+    public Patient updatePatient(Integer id, PatientRequest updatedPatient) {
+        Patient patient = getPatientOrThrow(id);
 
-        service.setAddress(updatedPatient.getAddress());
-        service.setName(updatedPatient.getName());
-        service.setDateOfBirth(updatedPatient.getDateOfBirth());
-        service.setPhoneNumber(updatedPatient.getPhoneNumber());
-        service.setEmail(updatedPatient.getEmail());
-
-        return patientRepository.save(service);
+        modelMapper.map(updatedPatient, patient);
+        return patientRepository.save(patient);
     }
 
     @Transactional
     public void deletePatient(Integer id) {
-        Patient service = getPatientOrThrow(id);
+        Patient patient = getPatientOrThrow(id);
 
-        patientRepository.delete(service);
+        patientRepository.delete(patient);
     }
 
     private Patient getPatientOrThrow(Integer id) {

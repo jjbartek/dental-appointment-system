@@ -1,4 +1,4 @@
-package com.das.payloads;
+package com.das.requests;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

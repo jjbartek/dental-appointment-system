@@ -11,11 +11,12 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AppointmentRepository extends JpaRepository<Appointment, Integer> {
+
     @Query(value = "SELECT a FROM Appointment a WHERE a.startTime >= :dateTime OR a.endTime >= :dateTime")
-    Page<Appointment> findByPreTime(@Param("dateTime") LocalDateTime dateTime, Pageable p);
+    Page<Appointment> findByPostTime(@Param("dateTime") LocalDateTime dateTime, Pageable p);
 
     @Query(value = "SELECT a FROM Appointment a WHERE a.endTime <= :dateTime OR a.startTime = :dateTime")
-    Page<Appointment> findByPostTime(@Param("dateTime") LocalDateTime dateTime, Pageable p);
+    Page<Appointment> findByPreTime(@Param("dateTime") LocalDateTime dateTime, Pageable p);
 
     @Query(value = "SELECT a FROM Appointment a WHERE a.employee.id = :employeeId AND (a.startTime >= :dateTime OR a.endTime >= :dateTime)")
     Page<Appointment> findByPostTimeAndEmployeeId(@Param("dateTime") LocalDateTime dateTime, @Param("employeeId") Integer employeeId, Pageable p);
@@ -32,7 +33,7 @@ public interface AppointmentRepository extends JpaRepository<Appointment, Intege
     @Query(value = """
             SELECT a
             FROM Appointment a WHERE a.employee.id = :employeeId AND
-            ((a.startTime >= :startTime AND a.endTime >= :startTime) OR (a.startTime >= :endTime AND a.endTime >= :endTime))""")
+            ((a.startTime <= :startTime AND a.endTime > :startTime) OR (a.startTime < :endTime AND a.endTime >= :endTime))""")
     List<Appointment> findByTimeBetweenAndEmployeeId(@Param("startTime") LocalDateTime startTime,
                                                         @Param("endTime") LocalDateTime endTime,
                                                         @Param("employeeId") Integer employeeId);
