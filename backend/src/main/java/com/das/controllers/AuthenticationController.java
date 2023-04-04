@@ -4,6 +4,7 @@ import com.das.requests.JwtAuthRequest;
 import com.das.responses.JwtAuthResponse;
 import com.das.requests.RegisterRequest;
 import com.das.services.AuthenticationService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/api/v1/auth")
 @RequiredArgsConstructor
+@Tag(name = "Authentication")
 public class AuthenticationController {
 
     private final AuthenticationService authenticationService;

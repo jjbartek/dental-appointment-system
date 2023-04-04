@@ -4,6 +4,7 @@ import com.das.DTOs.AppointmentDTO;
 import com.das.requests.AppointmentRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +18,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/v1/appointments")
 @RequiredArgsConstructor
-public class AppointmentController {
+@Tag(name = "Appointment")
+public class AppointmentController implements SecuredController {
     private final AppointmentService appointmentService;
 
     @GetMapping

@@ -4,6 +4,7 @@ import com.das.entities.Service;
 import com.das.requests.ServiceRequest;
 import com.das.responses.ServiceResponse;
 import com.das.services.ServiceService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -13,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
-public class ServiceController {
+@Tag(name = "Service")
+public class ServiceController implements SecuredController {
     private final ServiceService serviceService;
 
     @GetMapping("{id}")

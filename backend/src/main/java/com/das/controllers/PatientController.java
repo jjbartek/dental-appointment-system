@@ -3,10 +3,10 @@ package com.das.controllers;
 import com.das.DTOs.AppointmentDTO;
 import com.das.entities.Patient;
 import com.das.requests.PatientRequest;
-import com.das.requests.ServiceRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import com.das.services.PatientService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +20,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/v1/patients")
 @RequiredArgsConstructor
-public class PatientController {
+@Tag(name = "Patient")
+public class PatientController implements SecuredController {
     private final PatientService patientService;
     private final AppointmentService appointmentService;
 

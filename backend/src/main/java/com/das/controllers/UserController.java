@@ -8,6 +8,7 @@ import com.das.requests.UserUpdateRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
 import com.das.services.UserService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -20,7 +21,8 @@ import java.time.LocalDateTime;
 @RestController
 @RequestMapping("/api/v1/users")
 @AllArgsConstructor
-public class UserController {
+@Tag(name = "User")
+public class UserController implements SecuredController {
     private final UserService userService;
     private final AppointmentService appointmentService;
 

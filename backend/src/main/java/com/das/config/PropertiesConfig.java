@@ -6,4 +6,8 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 public class PropertiesConfig {
     private String jwtSecret;
     private long expirationTime;
+    private String url;
+    private String version;
+    private String description;
+
 }
