@@ -9,6 +9,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -29,16 +30,19 @@ public class ServiceController implements SecuredController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping
     public ResponseEntity<Service> createService(@Valid @RequestBody ServiceRequest serviceRequest) {
         return new ResponseEntity<>(serviceService.addService(serviceRequest), HttpStatus.CREATED);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("{id}")
     public ResponseEntity<Service> updateService(@PathVariable Integer id, @Valid @RequestBody ServiceRequest serviceRequest) {
         return new ResponseEntity<>(serviceService.updateService(id, serviceRequest), HttpStatus.OK);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     @DeleteMapping("{id}")
     public ResponseEntity<Void> deleteService(@PathVariable Integer id) {
         serviceService.deleteService(id);

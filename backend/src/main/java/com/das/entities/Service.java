@@ -23,9 +23,9 @@ public class Service {
     @NotNull(message = "Service name cannot be null")
     private String name;
 
-    @Column(name = "min_price", nullable = false, columnDefinition = "DECIMAL(6, 2)")
+    @Column(name = "min_price", nullable = false, columnDefinition = "DECIMAL(8, 2)")
     @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer = 4, fraction = 2)
+    @Digits(integer = 6, fraction = 2)
     @NotNull(message = "Minimal price cannot be null")
     private BigDecimal minPrice;
 

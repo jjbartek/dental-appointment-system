@@ -7,7 +7,6 @@ import com.das.requests.ServiceRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
-import org.springframework.security.access.prepost.PreAuthorize;
 
 import java.util.List;
 
@@ -25,14 +24,12 @@ public class ServiceService {
         return serviceRepository.findAll();
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     public Service addService(ServiceRequest serviceRequest) {
         Service service = modelMapper.map(serviceRequest, Service.class);
 
         return serviceRepository.save(service);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public Service updateService(Integer id, ServiceRequest updatedService) {
         Service service = getServiceOrThrow(id);
@@ -41,7 +38,6 @@ public class ServiceService {
         return serviceRepository.save(service);
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @Transactional
     public void deleteService(Integer id) {
         Service service = getServiceOrThrow(id);

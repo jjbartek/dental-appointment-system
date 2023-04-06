@@ -33,7 +33,6 @@ public class Patient {
     private String phoneNumber;
 
     @Column(nullable = false, unique = true)
-    @NotNull(message = "Email cannot be null")
     @Email(message = "Invalid email")
     private String email;
 

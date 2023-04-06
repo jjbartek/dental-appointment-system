@@ -19,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -35,7 +34,6 @@ public class AppointmentService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'EMPLOYEE')")
     public CollectionResponse<AppointmentDTO> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
@@ -49,7 +47,6 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'EMPLOYEE')")
     public CollectionResponse<AppointmentDTO> getAppointmentsByPatientId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
@@ -63,7 +60,6 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     public CollectionResponse<AppointmentDTO> getAppointments(LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
@@ -77,12 +73,10 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     public AppointmentDTO getAppointmentById(Integer id) {
         return modelMapper.map(getAppointmentOrThrow(id), AppointmentDTO.class);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @Transactional
     public AppointmentDTO addAppointment(AppointmentRequest appointmentRequest) {
         Appointment appointment = new Appointment();
@@ -92,7 +86,6 @@ public class AppointmentService {
         return modelMapper.map(appointment, AppointmentDTO.class);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @Transactional
     public AppointmentDTO updateAppointment(Integer id, AppointmentRequest appointmentRequest) {
         Appointment appointment = getAppointmentOrThrow(id);
@@ -102,7 +95,6 @@ public class AppointmentService {
         return modelMapper.map(appointment, AppointmentDTO.class);
     }
 
-    @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")
     @Transactional
     public void deleteAppointment(Integer id) {
         Appointment appointment = getAppointmentOrThrow(id);

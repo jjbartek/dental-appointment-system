@@ -63,9 +63,9 @@ public class Appointment {
     @NotEmpty(message = "List of services must have at least one service")
     private List<Service> services;
 
-    @Column(columnDefinition = "DECIMAL(6, 2)")
+    @Column(columnDefinition = "DECIMAL(8, 2)")
     @DecimalMin(value = "0.0", inclusive = false)
-    @Digits(integer = 4, fraction = 2)
+    @Digits(integer = 6, fraction = 2)
     private BigDecimal total;
 
 }

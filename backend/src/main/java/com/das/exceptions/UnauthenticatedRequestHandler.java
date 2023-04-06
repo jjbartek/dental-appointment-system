@@ -1,4 +1,4 @@
-package com.das.config;
+package com.das.exceptions;
 
 import com.das.responses.ApiErrorResponse;
 import com.google.gson.Gson;
@@ -6,6 +6,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,13 @@ public class UnauthenticatedRequestHandler implements AuthenticationEntryPoint {
 
         if (message == null) message = authException.getMessage();
 
-        ApiErrorResponse res = new ApiErrorResponse(message);
+        ApiErrorResponse res = new ApiErrorResponse();
+        res.setCode(401);
+        if (authException instanceof BadCredentialsException || authException instanceof CredentialsExpiredException) {
+            res.setMessage(message);
+        } else {
+            res.setMessage("Unauthorized");
+        }
 
         PrintWriter out = response.getWriter();
         response.setContentType("application/json");

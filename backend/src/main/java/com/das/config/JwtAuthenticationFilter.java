@@ -1,7 +1,9 @@
 package com.das.config;
 
+import com.das.exceptions.UnauthenticatedRequestHandler;
 import com.das.services.JwtService;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.MalformedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -59,6 +61,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             unauthenticatedRequestHandler.commence(request, response, new CredentialsExpiredException("Expired JWT Token"));
         } catch (MalformedJwtException e) {
             unauthenticatedRequestHandler.commence(request, response, new BadCredentialsException("Invalid JWT Token"));
+        } catch (JwtException e) {
+            unauthenticatedRequestHandler.commence(request, response, new BadCredentialsException("JWT Token error"));
         }
     }
 }
