@@ -2,7 +2,6 @@ package com.das.controllers;
 
 import com.das.DTOs.AppointmentDTO;
 import com.das.DTOs.UserDTO;
-import com.das.config.AppConstants;
 import com.das.requests.UserCreateRequest;
 import com.das.requests.UserUpdateRequest;
 import com.das.responses.CollectionResponse;
@@ -32,18 +31,13 @@ public class UserController implements SecuredController {
     }
 
     @GetMapping("search/{nameOrEmail}")
-    public ResponseEntity<CollectionResponse<UserDTO>> getUserByNameOrEmail(
-            @PathVariable String nameOrEmail,
-            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
-        return new ResponseEntity<>(userService.getUserByNameOrEmail(nameOrEmail, pageNumber, pageSize), HttpStatus.OK);
+    public ResponseEntity<CollectionResponse<UserDTO>> getUsersByNameOrEmail(@PathVariable String nameOrEmail, Pageable pageable) {
+        return new ResponseEntity<>(userService.getUsersByNameOrEmail(nameOrEmail, pageable), HttpStatus.OK);
     }
 
     @GetMapping
-    public ResponseEntity<CollectionResponse<UserDTO>> getUsers(
-            @RequestParam(value = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
-            @RequestParam(value = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize) {
-        return new ResponseEntity<>(userService.getUsers(pageNumber, pageSize), HttpStatus.OK);
+    public ResponseEntity<CollectionResponse<UserDTO>> getUsers(Pageable pageable) {
+        return new ResponseEntity<>(userService.getUsers(pageable), HttpStatus.OK);
     }
 
     @PostMapping

@@ -1,17 +1,16 @@
 package com.das.services;
 
+import com.das.DTOs.UserDTO;
 import com.das.entities.User;
 import com.das.exceptions.ResourceNotFoundException;
-import com.das.requests.UserCreateRequest;
-import com.das.DTOs.UserDTO;
-import com.das.requests.UserUpdateRequest;
 import com.das.repositories.UserRepository;
+import com.das.requests.UserCreateRequest;
+import com.das.requests.UserUpdateRequest;
 import com.das.responses.CollectionResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,15 +26,13 @@ public class UserService {
     private final ModelMapper modelMapper;
     private final PasswordEncoder passwordEncoder;
 
-    public CollectionResponse<UserDTO> getUsers(Integer pageNumber, Integer pageSize) {
-        Pageable p = PageRequest.of(pageNumber, pageSize);
+    public CollectionResponse<UserDTO> getUsers(Pageable p) {
         Page<User> page = userRepository.findAll(p);
 
         return getResponseFromPage(page);
     }
 
-    public CollectionResponse<UserDTO> getUserByNameOrEmail(String nameOrEmail, Integer pageNumber, Integer pageSize) {
-        Pageable p = PageRequest.of(pageNumber, pageSize);
+    public CollectionResponse<UserDTO> getUsersByNameOrEmail(String nameOrEmail, Pageable p) {
         Page<User> page = userRepository.findByEmailOrName(nameOrEmail, nameOrEmail, p);
 
         return getResponseFromPage(page);
