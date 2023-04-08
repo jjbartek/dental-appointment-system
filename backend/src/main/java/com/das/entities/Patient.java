@@ -24,7 +24,6 @@ public class Patient {
 
     @Column(name = "patient_name", nullable = false)
     @NotBlank(message = "Patient name cannot be empty")
-    @NotNull(message = "Patient name cannot be null")
     private String name;
 
     @Column(name = "phone_number", nullable = false)
@@ -38,7 +37,6 @@ public class Patient {
 
     @Column(nullable = false)
     @NotBlank(message = "Address cannot be empty")
-    @NotNull(message = "Address cannot be null")
     private String address;
 
     @Column(name = "date_of_birth", nullable = false)

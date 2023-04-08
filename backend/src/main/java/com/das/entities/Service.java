@@ -20,7 +20,6 @@ public class Service {
 
     @Column(name = "service_name", nullable = false)
     @NotBlank(message = "Service name cannot be empty")
-    @NotNull(message = "Service name cannot be null")
     private String name;
 
     @Column(name = "min_price", nullable = false, columnDefinition = "DECIMAL(8, 2)")

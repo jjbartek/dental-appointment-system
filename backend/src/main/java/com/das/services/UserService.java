@@ -52,7 +52,7 @@ public class UserService {
         user.setEmail(userUpdateRequest.getEmail());
         user.setRoles(userUpdateRequest.getRoles());
 
-        if (userUpdateRequest.getPassword() != null && !userUpdateRequest.getPassword().isEmpty()) {
+        if (userUpdateRequest.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));
         }
 

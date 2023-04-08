@@ -17,7 +17,6 @@ import java.time.LocalDate;
 public class PatientRequest {
 
     @NotBlank(message = "Patient name cannot be empty")
-    @NotNull(message = "Patient name cannot be null")
     private String name;
 
     @NotNull(message = "Number cannot be null")
@@ -29,7 +28,6 @@ public class PatientRequest {
     private String email;
 
     @NotBlank(message = "Address cannot be empty")
-    @NotNull(message = "Address cannot be null")
     private String address;
 
     @NotNull(message = "Date of birth cannot be null")

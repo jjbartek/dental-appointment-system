@@ -1,5 +1,6 @@
 package com.das.requests;
 
+import com.das.validators.ValidPassword;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -13,12 +14,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class RegisterRequest {
     @NotBlank(message = "Username cannot be empty")
-    @NotNull(message = "Username cannot be null")
     private String username;
     @NotBlank(message = "Email cannot be empty")
-    @NotNull(message = "Email cannot be null")
     private String email;
-    @NotBlank(message = "Password cannot be empty")
+
     @NotNull(message = "Password cannot be null")
+    @ValidPassword
     private String password;
 }

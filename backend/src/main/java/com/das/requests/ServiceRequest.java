@@ -15,7 +15,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ServiceRequest {
     @NotBlank(message = "Service name cannot be empty")
-    @NotNull(message = "Service name cannot be null")
     private String name;
 
     @Digits(integer = 4, fraction = 2)

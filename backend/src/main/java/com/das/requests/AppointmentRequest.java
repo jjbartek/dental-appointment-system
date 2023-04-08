@@ -23,7 +23,7 @@ public class AppointmentRequest {
     @NotNull(message = "Employee's id cannot be null")
     private Integer employeeId;
 
-    @NotNull(message = "Patient;s id cannot be null")
+    @NotNull(message = "Patient's id cannot be null")
     private Integer patientId;
 
     @NotNull(message = "Start time cannot be null")
@@ -37,7 +37,6 @@ public class AppointmentRequest {
     @NotNull(message = "Status cannot be null")
     private Status status;
 
-    @NotNull(message = "List of services cannot be null")
     @NotEmpty(message = "List of services must have at least one service")
     private List<Integer> serviceIds;
 

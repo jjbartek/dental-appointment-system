@@ -59,7 +59,6 @@ public class Appointment {
             joinColumns = @JoinColumn(name = "appointment_id"),
             inverseJoinColumns = @JoinColumn(name = "service_id")
     )
-    @NotNull(message = "List of services cannot be null")
     @NotEmpty(message = "List of services must have at least one service")
     private List<Service> services;
 

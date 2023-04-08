@@ -30,7 +30,6 @@ public class User implements UserDetails {
 
     @Column(name = "username", nullable = false, unique = true)
     @NotBlank(message = "Username cannot be empty")
-    @NotNull(message = "Username cannot be null")
     private String name;
 
     @Column(nullable = false, unique = true)
@@ -39,7 +38,6 @@ public class User implements UserDetails {
     private String email;
 
     @Column(nullable = false)
-    @NotBlank(message = "Password cannot be empty")
     @NotNull(message = "Password cannot be null")
     private String password;
 
@@ -47,7 +45,6 @@ public class User implements UserDetails {
     @JoinTable(name = "users_roles", joinColumns = @JoinColumn(name = "user_id", nullable = false))
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    @NotNull(message = "Role list cannot be null")
     @NotEmpty(message = "Role list cannot be empty")
     private List<Role> roles = new ArrayList<>();
 

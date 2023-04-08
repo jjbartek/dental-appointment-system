@@ -1,6 +1,7 @@
 package com.das.requests;
 
 import com.das.entities.Role;
+import com.das.validators.ValidPassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -16,16 +17,15 @@ import java.util.List;
 @AllArgsConstructor
 public class UserUpdateRequest {
     @NotBlank(message = "Username cannot be empty")
-    @NotNull(message = "Username cannot be null")
     private String name;
 
     @NotNull(message = "Email cannot be null")
     @Email(message = "Invalid email")
     private String email;
 
+    @ValidPassword
     private String password;
 
-    @NotNull(message = "Role list cannot be null")
     @NotEmpty(message = "Role list cannot be empty")
     private List<Role> roles;
 
