@@ -1,10 +1,8 @@
 package com.das.entities;
 
+import com.das.config.AppConstants;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -30,11 +28,12 @@ public class User implements UserDetails {
 
     @Column(name = "username", nullable = false, unique = true)
     @NotBlank(message = "Username cannot be empty")
+    @Size(min = 5, max = 64, message = "User name must be of length 5-64")
     private String name;
 
     @Column(nullable = false, unique = true)
-    @NotNull(message = "Email cannot be null")
-    @Email(message = "Invalid email")
+    @NotBlank(message = "Email cannot be blank")
+    @Email(message = "Invalid email", regexp = AppConstants.EMAIL_REGEX)
     private String email;
 
     @Column(nullable = false)

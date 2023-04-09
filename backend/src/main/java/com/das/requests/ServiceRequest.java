@@ -1,9 +1,6 @@
 package com.das.requests;
 
-import jakarta.validation.constraints.Digits;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,9 +12,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ServiceRequest {
     @NotBlank(message = "Service name cannot be empty")
+    @Size(min = 5, message = "Service name must be at least 5 characters")
     private String name;
 
-    @Digits(integer = 4, fraction = 2)
+    @Digits(integer = 6, fraction = 2)
     @NotNull(message = "Minimal price cannot be null")
     private BigDecimal minPrice;
 

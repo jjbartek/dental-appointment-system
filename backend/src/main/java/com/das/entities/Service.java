@@ -20,6 +20,7 @@ public class Service {
 
     @Column(name = "service_name", nullable = false)
     @NotBlank(message = "Service name cannot be empty")
+    @Size(min = 5, message = "Service name must be at least 5 characters")
     private String name;
 
     @Column(name = "min_price", nullable = false, columnDefinition = "DECIMAL(8, 2)")

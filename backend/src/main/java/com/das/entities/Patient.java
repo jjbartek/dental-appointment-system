@@ -1,11 +1,9 @@
 package com.das.entities;
 
+import com.das.config.AppConstants;
 import com.das.validators.PastDate;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -24,6 +22,7 @@ public class Patient {
 
     @Column(name = "patient_name", nullable = false)
     @NotBlank(message = "Patient name cannot be empty")
+    @Size(min = 5, max = 64, message = "Patient name must be of length 5-64")
     private String name;
 
     @Column(name = "phone_number", nullable = false)
@@ -32,11 +31,12 @@ public class Patient {
     private String phoneNumber;
 
     @Column(nullable = false, unique = true)
-    @Email(message = "Invalid email")
+    @Email(message = "Invalid email", regexp = AppConstants.EMAIL_REGEX)
     private String email;
 
     @Column(nullable = false)
     @NotBlank(message = "Address cannot be empty")
+    @Size(min = 5, message = "Address must be at least 5 characters long")
     private String address;
 
     @Column(name = "date_of_birth", nullable = false)

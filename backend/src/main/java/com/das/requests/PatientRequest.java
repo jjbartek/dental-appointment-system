@@ -1,10 +1,8 @@
 package com.das.requests;
 
+import com.das.config.AppConstants;
 import com.das.validators.PastDate;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +15,7 @@ import java.time.LocalDate;
 public class PatientRequest {
 
     @NotBlank(message = "Patient name cannot be empty")
+    @Size(min = 5, max = 64, message = "Patient name must be of length 5-64")
     private String name;
 
     @NotNull(message = "Number cannot be null")
@@ -24,10 +23,11 @@ public class PatientRequest {
     private String phoneNumber;
 
     @NotNull(message = "Email cannot be null")
-    @Email(message = "Invalid email")
+    @Email(message = "Invalid email", regexp = AppConstants.EMAIL_REGEX)
     private String email;
 
     @NotBlank(message = "Address cannot be empty")
+    @Size(min = 5, message = "Address must be at least 5 characters long")
     private String address;
 
     @NotNull(message = "Date of birth cannot be null")

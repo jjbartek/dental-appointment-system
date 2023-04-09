@@ -53,7 +53,7 @@ public class Appointment {
     @NotNull(message = "Status cannot be null")
     private Status status;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany
     @JoinTable(
             name = "appointments_services",
             joinColumns = @JoinColumn(name = "appointment_id"),
