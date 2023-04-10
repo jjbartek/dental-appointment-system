@@ -2,7 +2,7 @@ package com.das.requests;
 
 import com.das.config.AppConstants;
 import com.das.entities.Role;
-import com.das.validators.ValidPassword;
+import com.das.validators.ValidatePassword;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,7 +23,7 @@ public class UserCreateRequest {
     private String email;
 
     @NotNull(message = "Password cannot be null")
-    @ValidPassword
+    @ValidatePassword
     private String password;
 
     @NotEmpty(message = "Role list cannot be empty")

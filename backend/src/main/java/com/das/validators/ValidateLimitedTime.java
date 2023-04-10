@@ -1,6 +1,5 @@
 package com.das.validators;
 
-import com.das.validators.impl.PastDateImpl;
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;
 
@@ -11,9 +10,10 @@ import java.lang.annotation.Target;
 
 @Target(ElementType.FIELD)
 @Retention(RetentionPolicy.RUNTIME)
-@Constraint(validatedBy = PastDateImpl.class)
-public @interface PastDate {
-    String message() default "{com.das.PastDate.message}";
+@Constraint(validatedBy = {LimitedTimeLocalDateValidator.class, LimitedTimeLocalDateTimeValidator.class})
+public @interface ValidateLimitedTime {
+    String message() default "Time is not in the correct time frame (past/future)";
+    ValidateTimeFrame timeframe() default ValidateTimeFrame.FUTURE;
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

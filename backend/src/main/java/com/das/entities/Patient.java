@@ -1,7 +1,8 @@
 package com.das.entities;
 
 import com.das.config.AppConstants;
-import com.das.validators.PastDate;
+import com.das.validators.ValidateLimitedTime;
+import com.das.validators.ValidateTimeFrame;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -41,6 +42,6 @@ public class Patient {
 
     @Column(name = "date_of_birth", nullable = false)
     @NotNull(message = "Date of birth cannot be null")
-    @PastDate(message = "Invalid date of birth")
+    @ValidateLimitedTime(timeframe = ValidateTimeFrame.PAST, message = "Invalid date of birth")
     private LocalDate dateOfBirth;
 }

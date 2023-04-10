@@ -1,7 +1,7 @@
 package com.das.requests;
 
 import com.das.config.AppConstants;
-import com.das.validators.ValidPassword;
+import com.das.validators.ValidatePassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -24,6 +24,6 @@ public class RegisterRequest {
     private String email;
 
     @NotNull(message = "Password cannot be null")
-    @ValidPassword
+    @ValidatePassword
     private String password;
 }

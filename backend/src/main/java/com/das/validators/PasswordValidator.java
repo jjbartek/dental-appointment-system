@@ -1,22 +1,21 @@
-package com.das.validators.impl;
+package com.das.validators;
 
-import com.das.validators.ValidPassword;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
 import org.passay.*;
 
 import java.util.Arrays;
 
-public class ValidPasswordImpl implements ConstraintValidator<ValidPassword, String> {
+public class PasswordValidator implements ConstraintValidator<ValidatePassword, String> {
 
     @Override
-    public void initialize(final ValidPassword annotation) {}
+    public void initialize(final ValidatePassword annotation) {}
 
     @Override
     public boolean isValid(String value, ConstraintValidatorContext context) {
         if(value == null) return true;
 
-        PasswordValidator validator = new PasswordValidator(Arrays.asList(
+        org.passay.PasswordValidator validator = new org.passay.PasswordValidator(Arrays.asList(
                 new LengthRule(8, 30),
                 new WhitespaceRule(),
                 new CharacterRule(PolishCharacterData.UpperCase, 1),
