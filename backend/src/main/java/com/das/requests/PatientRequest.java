@@ -1,8 +1,8 @@
 package com.das.requests;
 
 import com.das.config.AppConstants;
+import com.das.validators.TimeFrame;
 import com.das.validators.ValidateLimitedTime;
-import com.das.validators.ValidateTimeFrame;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -32,6 +32,6 @@ public class PatientRequest {
     private String address;
 
     @NotNull(message = "Date of birth cannot be null")
-    @ValidateLimitedTime(timeframe = ValidateTimeFrame.PAST, message = "Invalid date of birth")
+    @ValidateLimitedTime(timeframe = TimeFrame.PAST, message = "Invalid date of birth")
     private LocalDate dateOfBirth;
 }

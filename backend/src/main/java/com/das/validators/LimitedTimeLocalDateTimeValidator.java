@@ -6,7 +6,7 @@ import jakarta.validation.ConstraintValidatorContext;
 import java.time.LocalDateTime;
 
 public class LimitedTimeLocalDateTimeValidator implements ConstraintValidator<ValidateLimitedTime, LocalDateTime> {
-    private ValidateTimeFrame timeframe;
+    private TimeFrame timeframe;
 
     @Override
     public void initialize(final ValidateLimitedTime annotation) {
@@ -15,7 +15,7 @@ public class LimitedTimeLocalDateTimeValidator implements ConstraintValidator<Va
 
     @Override
     public boolean isValid(LocalDateTime passedDate, ConstraintValidatorContext context) {
-        if (timeframe == ValidateTimeFrame.FUTURE) {
+        if (timeframe == TimeFrame.FUTURE) {
             return passedDate.isAfter(LocalDateTime.now());
         } else {
             return passedDate.isBefore(LocalDateTime.now());

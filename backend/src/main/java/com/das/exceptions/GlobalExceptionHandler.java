@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -24,14 +25,21 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(value = {
-            UserDoesNotHavePrivilegeException.class,
-            AppointmentTimeNotAvailable.class
-    })
+    @ExceptionHandler(value = UserDoesNotHavePrivilegeException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public ResponseEntity<ApiErrorResponse> handleUserDoesNotHavePrivilege(Exception e) {
+    public ResponseEntity<ApiErrorResponse> handleForbidden(UserDoesNotHavePrivilegeException e) {
         ApiErrorResponse response = new ApiErrorResponse(403, e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = {
+            AppointmentTimeNotAvailable.class,
+            EmailNotAvailableException.class
+    })
+    @ResponseStatus(HttpStatus.CONFLICT)
+    public ResponseEntity<ApiErrorResponse> handleConflict(Exception e) {
+        ApiErrorResponse response = new ApiErrorResponse(409, e.getMessage());
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(value = MethodArgumentNotValidException.class)
@@ -57,6 +65,13 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<ApiErrorResponse> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException e) {
         ApiErrorResponse response = new ApiErrorResponse(400, "Argument type mismatch error");
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrorResponse> handleNotSupportedException(HttpRequestMethodNotSupportedException e) {
+        ApiErrorResponse response = new ApiErrorResponse(400, "This HTTP request is not supported");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

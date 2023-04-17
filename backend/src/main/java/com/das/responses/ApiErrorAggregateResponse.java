@@ -10,7 +10,7 @@ import java.util.Map;
 @Setter
 @NoArgsConstructor
 public class ApiErrorAggregateResponse extends ApiErrorResponse {
-    Map<String, String> errors;
+    private Map<String, String> errors;
 
     public ApiErrorAggregateResponse(Integer code, String message, Map<String, String> errors) {
         super(code, message);

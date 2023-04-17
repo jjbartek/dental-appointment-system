@@ -26,7 +26,7 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name = "username", nullable = false, unique = true)
+    @Column(name = "username", nullable = false)
     @NotBlank(message = "Username cannot be empty")
     @Size(min = 5, max = 64, message = "User name must be of length 5-64")
     private String name;

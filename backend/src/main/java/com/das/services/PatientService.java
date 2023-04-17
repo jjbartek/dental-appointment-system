@@ -1,6 +1,7 @@
 package com.das.services;
 
 import com.das.entities.Patient;
+import com.das.exceptions.EmailNotAvailableException;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.repositories.PatientRepository;
 import com.das.requests.PatientRequest;
@@ -36,6 +37,7 @@ public class PatientService {
     }
 
     public Patient addPatient(PatientRequest patientRequest) {
+        checkEmailUniqueness(patientRequest.getEmail());
         Patient patient = modelMapper.map(patientRequest, Patient.class);
 
         return patientRepository.save(patient);
@@ -44,6 +46,7 @@ public class PatientService {
     @Transactional
     public Patient updatePatient(Integer id, PatientRequest updatedPatient) {
         Patient patient = getPatientOrThrow(id);
+        if (!patient.getEmail().equals(updatedPatient.getEmail())) checkEmailUniqueness(updatedPatient.getEmail());
 
         modelMapper.map(updatedPatient, patient);
         return patientRepository.save(patient);
@@ -54,6 +57,12 @@ public class PatientService {
         Patient patient = getPatientOrThrow(id);
 
         patientRepository.delete(patient);
+    }
+
+    private void checkEmailUniqueness(String email) {
+        if (patientRepository.existsByEmail(email)) {
+            throw new EmailNotAvailableException(email);
+        }
     }
 
     private Patient getPatientOrThrow(Integer id) {

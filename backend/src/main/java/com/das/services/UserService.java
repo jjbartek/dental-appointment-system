@@ -2,6 +2,7 @@ package com.das.services;
 
 import com.das.DTOs.UserDTO;
 import com.das.entities.User;
+import com.das.exceptions.EmailNotAvailableException;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.repositories.UserRepository;
 import com.das.requests.UserCreateRequest;
@@ -38,6 +39,8 @@ public class UserService {
 
     @Transactional
     public UserDTO addUser(UserCreateRequest userCreateRequest) {
+        checkEmailUniqueness(userCreateRequest.getEmail());
+        userCreateRequest.setPassword(passwordEncoder.encode(userCreateRequest.getPassword()));
         User user = modelMapper.map(userCreateRequest, User.class);
         user = userRepository.save(user);
 
@@ -47,6 +50,7 @@ public class UserService {
     @Transactional
     public UserDTO updateUser(Integer id, UserUpdateRequest userUpdateRequest) {
         User user = getUserOrThrow(id);
+        if (!user.getEmail().equals(userUpdateRequest.getEmail())) checkEmailUniqueness(userUpdateRequest.getEmail());
 
         user.setName(userUpdateRequest.getName());
         user.setEmail(userUpdateRequest.getEmail());
@@ -71,6 +75,12 @@ public class UserService {
     public UserDTO getUserById(Integer id) {
         User user = getUserOrThrow(id);
         return modelMapper.map(user, UserDTO.class);
+    }
+
+    private void checkEmailUniqueness(String email) {
+        if (userRepository.existsByEmail(email)) {
+            throw new EmailNotAvailableException(email);
+        }
     }
 
     private CollectionResponse<UserDTO> getResponseFromPage(Page<User> page) {

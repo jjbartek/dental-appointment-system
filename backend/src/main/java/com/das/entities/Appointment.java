@@ -3,7 +3,7 @@ package com.das.entities;
 import com.das.config.AppConstants;
 import com.das.validators.ValidateFollowingDates;
 import com.das.validators.ValidateLimitedTime;
-import com.das.validators.ValidateTimeFrame;
+import com.das.validators.TimeFrame;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -42,13 +42,13 @@ public class Appointment {
     @Column(name = "start_time", nullable = false, columnDefinition = "TIMESTAMP")
     @NotNull(message = "Start time cannot be null")
     @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
-    @ValidateLimitedTime(timeframe = ValidateTimeFrame.FUTURE, message = "Start of the visit have to be in the future")
+    @ValidateLimitedTime(timeframe = TimeFrame.FUTURE, message = "Start of the visit have to be in the future")
     private LocalDateTime startTime;
 
     @Column(name = "end_time", nullable = false, columnDefinition = "TIMESTAMP")
     @NotNull(message = "End time cannot be null")
     @JsonFormat(pattern = AppConstants.DATE_FORMAT, timezone = AppConstants.TIME_ZONE)
-    @ValidateLimitedTime(timeframe = ValidateTimeFrame.FUTURE, message = "End of the visit have to be in the future")
+    @ValidateLimitedTime(timeframe = TimeFrame.FUTURE, message = "End of the visit have to be in the future")
     private LocalDateTime endTime;
 
     @Column(columnDefinition = "TEXT")

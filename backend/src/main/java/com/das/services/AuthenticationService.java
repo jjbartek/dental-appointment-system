@@ -2,10 +2,11 @@ package com.das.services;
 
 import com.das.entities.Role;
 import com.das.entities.User;
-import com.das.requests.JwtAuthRequest;
-import com.das.responses.JwtAuthResponse;
-import com.das.requests.RegisterRequest;
+import com.das.exceptions.EmailNotAvailableException;
 import com.das.repositories.UserRepository;
+import com.das.requests.JwtAuthRequest;
+import com.das.requests.RegisterRequest;
+import com.das.responses.JwtAuthResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -25,6 +26,10 @@ public class AuthenticationService {
     private final AuthenticationManager authenticationManager;
 
     public JwtAuthResponse register(RegisterRequest userData) {
+        if (userRepository.existsByEmail(userData.getEmail())) {
+            throw new EmailNotAvailableException(userData.getEmail());
+        }
+
         User user = User.builder()
                 .name(userData.getUsername())
                 .email(userData.getEmail())

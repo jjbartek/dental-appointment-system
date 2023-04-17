@@ -1,6 +1,6 @@
 package com.das.validators;
 
-public enum ValidateTimeFrame {
+public enum TimeFrame {
     PAST,
     FUTURE
 }

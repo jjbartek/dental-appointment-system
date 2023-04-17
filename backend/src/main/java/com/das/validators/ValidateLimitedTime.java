@@ -13,7 +13,7 @@ import java.lang.annotation.Target;
 @Constraint(validatedBy = {LimitedTimeLocalDateValidator.class, LimitedTimeLocalDateTimeValidator.class})
 public @interface ValidateLimitedTime {
     String message() default "Time is not in the correct time frame (past/future)";
-    ValidateTimeFrame timeframe() default ValidateTimeFrame.FUTURE;
+    TimeFrame timeframe() default TimeFrame.FUTURE;
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};
 }

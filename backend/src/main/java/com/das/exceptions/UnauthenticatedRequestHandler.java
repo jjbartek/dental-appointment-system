@@ -9,6 +9,7 @@ import org.springframework.context.MessageSource;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.CredentialsExpiredException;
 import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
@@ -30,7 +31,9 @@ public class UnauthenticatedRequestHandler implements AuthenticationEntryPoint {
 
         ApiErrorResponse res = new ApiErrorResponse();
         res.setCode(401);
-        if (authException instanceof BadCredentialsException || authException instanceof CredentialsExpiredException) {
+        if (authException instanceof BadCredentialsException ||
+                authException instanceof CredentialsExpiredException ||
+                authException instanceof UsernameNotFoundException) {
             res.setMessage(message);
         } else {
             res.setMessage("Unauthorized");

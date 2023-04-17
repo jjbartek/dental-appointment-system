@@ -3,7 +3,7 @@ package com.das.requests;
 import com.das.entities.Status;
 import com.das.validators.ValidateFollowingDates;
 import com.das.validators.ValidateLimitedTime;
-import com.das.validators.ValidateTimeFrame;
+import com.das.validators.TimeFrame;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
@@ -31,11 +31,11 @@ public class AppointmentRequest {
     private Integer patientId;
 
     @NotNull(message = "Start time cannot be null")
-    @ValidateLimitedTime(timeframe = ValidateTimeFrame.FUTURE, message = "Start of the visit have to be in the future")
+    @ValidateLimitedTime(timeframe = TimeFrame.FUTURE, message = "Start of the visit have to be in the future")
     private LocalDateTime startTime;
 
     @NotNull(message = "End time cannot be null")
-    @ValidateLimitedTime(timeframe = ValidateTimeFrame.FUTURE, message = "End of the visit have to be in the future")
+    @ValidateLimitedTime(timeframe = TimeFrame.FUTURE, message = "End of the visit have to be in the future")
     private LocalDateTime endTime;
 
     private String notes;
