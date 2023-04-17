@@ -44,4 +44,10 @@ public class Patient {
     @NotNull(message = "Date of birth cannot be null")
     @ValidateLimitedTime(timeframe = TimeFrame.PAST, message = "Invalid date of birth")
     private LocalDate dateOfBirth;
+
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "gender", nullable = false)
+    @NotNull(message = "Gender cannot be null")
+    private Gender gender;
 }

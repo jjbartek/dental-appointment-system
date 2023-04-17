@@ -1,10 +1,7 @@
 package com.das.services;
 
 import com.das.DTOs.AppointmentDTO;
-import com.das.entities.Appointment;
-import com.das.entities.Patient;
-import com.das.entities.Role;
-import com.das.entities.User;
+import com.das.entities.*;
 import com.das.exceptions.AppointmentTimeNotAvailable;
 import com.das.exceptions.ResourceNotFoundException;
 import com.das.exceptions.UserDoesNotHavePrivilegeException;
@@ -157,7 +154,7 @@ public class AppointmentService {
         appointment.setStartTime(appointmentRequest.getStartTime());
         appointment.setEndTime(appointmentRequest.getEndTime());
         appointment.setNotes(appointmentRequest.getNotes());
-        appointment.setStatus(appointmentRequest.getStatus());
+        appointment.setStatus(Status.valueOf(appointmentRequest.getStatus()));
 
         if(isAppointmentTimeNotAvailable(appointment))
             throw new AppointmentTimeNotAvailable(appointment.getStartTime());

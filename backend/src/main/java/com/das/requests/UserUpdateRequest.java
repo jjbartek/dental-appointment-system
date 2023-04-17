@@ -2,6 +2,7 @@ package com.das.requests;
 
 import com.das.config.AppConstants;
 import com.das.entities.Role;
+import com.das.validators.ValidateEnumValue;
 import com.das.validators.ValidatePassword;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -29,6 +30,6 @@ public class UserUpdateRequest {
     private String password;
 
     @NotEmpty(message = "Role list cannot be empty")
-    private List<Role> roles;
-
+    @ValidateEnumValue(value = Role.class, message = "Invalid value for role")
+    private List<String> roles;
 }

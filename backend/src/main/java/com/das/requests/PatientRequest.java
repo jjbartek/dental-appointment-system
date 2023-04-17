@@ -1,7 +1,9 @@
 package com.das.requests;
 
 import com.das.config.AppConstants;
+import com.das.entities.Gender;
 import com.das.validators.TimeFrame;
+import com.das.validators.ValidateEnumValue;
 import com.das.validators.ValidateLimitedTime;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
@@ -34,4 +36,8 @@ public class PatientRequest {
     @NotNull(message = "Date of birth cannot be null")
     @ValidateLimitedTime(timeframe = TimeFrame.PAST, message = "Invalid date of birth")
     private LocalDate dateOfBirth;
+
+    @NotNull(message = "Gender cannot be null")
+    @ValidateEnumValue(value = Gender.class, message = "Invalid value for gender")
+    private String gender;
 }

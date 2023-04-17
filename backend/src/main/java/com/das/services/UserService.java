@@ -1,6 +1,7 @@
 package com.das.services;
 
 import com.das.DTOs.UserDTO;
+import com.das.entities.Role;
 import com.das.entities.User;
 import com.das.exceptions.EmailNotAvailableException;
 import com.das.exceptions.ResourceNotFoundException;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -54,7 +56,9 @@ public class UserService {
 
         user.setName(userUpdateRequest.getName());
         user.setEmail(userUpdateRequest.getEmail());
-        user.setRoles(userUpdateRequest.getRoles());
+        user.setRoles(userUpdateRequest.getRoles().stream()
+                .map(Role::valueOf)
+                .collect(Collectors.toList()));
 
         if (userUpdateRequest.getPassword() != null) {
             user.setPassword(passwordEncoder.encode(userUpdateRequest.getPassword()));

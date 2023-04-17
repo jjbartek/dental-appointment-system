@@ -4,6 +4,7 @@ import com.das.responses.ApiErrorAggregateResponse;
 import com.das.responses.ApiErrorResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -58,6 +59,13 @@ public class GlobalExceptionHandler {
         });
 
         ApiErrorAggregateResponse response = new ApiErrorAggregateResponse(400, "Validation failed", errors);
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ResponseEntity<ApiErrorResponse> handleNotReadable(HttpMessageNotReadableException e) {
+        ApiErrorResponse response = new ApiErrorResponse(400, "Malformed request");
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 

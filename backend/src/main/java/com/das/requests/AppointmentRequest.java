@@ -1,9 +1,10 @@
 package com.das.requests;
 
 import com.das.entities.Status;
+import com.das.validators.TimeFrame;
+import com.das.validators.ValidateEnumValue;
 import com.das.validators.ValidateFollowingDates;
 import com.das.validators.ValidateLimitedTime;
-import com.das.validators.TimeFrame;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Digits;
 import jakarta.validation.constraints.NotEmpty;
@@ -41,7 +42,8 @@ public class AppointmentRequest {
     private String notes;
 
     @NotNull(message = "Status cannot be null")
-    private Status status;
+    @ValidateEnumValue(value = Status.class, message = "Invalid value for status")
+    private String status;
 
     @NotEmpty(message = "List of services must have at least one service")
     private List<Integer> serviceIds;

@@ -1,9 +1,9 @@
 package com.das.entities;
 
 import com.das.config.AppConstants;
+import com.das.validators.TimeFrame;
 import com.das.validators.ValidateFollowingDates;
 import com.das.validators.ValidateLimitedTime;
-import com.das.validators.TimeFrame;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.DecimalMin;
@@ -54,7 +54,7 @@ public class Appointment {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    @Enumerated(EnumType.ORDINAL)
+    @Enumerated(EnumType.STRING)
     @Column(name = "a_status", nullable = false)
     @NotNull(message = "Status cannot be null")
     private Status status;
