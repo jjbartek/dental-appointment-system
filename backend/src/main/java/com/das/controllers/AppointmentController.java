@@ -1,6 +1,7 @@
 package com.das.controllers;
 
 import com.das.DTOs.AppointmentDTO;
+import com.das.DTOs.SimplifiedAppointmentDTO;
 import com.das.requests.AppointmentRequest;
 import com.das.responses.CollectionResponse;
 import com.das.services.AppointmentService;
@@ -25,11 +26,11 @@ public class AppointmentController implements SecuredController {
     private final AppointmentService appointmentService;
 
     @GetMapping
-    public ResponseEntity<CollectionResponse<AppointmentDTO>> getAppointments(
+    public ResponseEntity<CollectionResponse<SimplifiedAppointmentDTO>> getAppointments(
             @RequestParam(value = "dateTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
             @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
             Pageable pageable) {
-        CollectionResponse<AppointmentDTO> response = appointmentService.getAppointments(dateTime, showPreceding, pageable);
+        CollectionResponse<SimplifiedAppointmentDTO> response = appointmentService.getAppointments(dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

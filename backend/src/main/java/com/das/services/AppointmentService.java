@@ -1,6 +1,7 @@
 package com.das.services;
 
 import com.das.DTOs.AppointmentDTO;
+import com.das.DTOs.SimplifiedAppointmentDTO;
 import com.das.entities.*;
 import com.das.exceptions.AppointmentTimeNotAvailable;
 import com.das.exceptions.ResourceNotFoundException;
@@ -31,7 +32,7 @@ public class AppointmentService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public CollectionResponse<AppointmentDTO> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+    public CollectionResponse<SimplifiedAppointmentDTO> getAppointmentsByEmployeeId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
         Page<Appointment> page;
@@ -44,7 +45,7 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    public CollectionResponse<AppointmentDTO> getAppointmentsByPatientId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+    public CollectionResponse<SimplifiedAppointmentDTO> getAppointmentsByPatientId(Integer id, LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
         Page<Appointment> page;
@@ -57,7 +58,7 @@ public class AppointmentService {
         return buildAppointmentResponse(page);
     }
 
-    public CollectionResponse<AppointmentDTO> getAppointments(LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
+    public CollectionResponse<SimplifiedAppointmentDTO> getAppointments(LocalDateTime dateTime, boolean showPreceding, Pageable pageable) {
         if(dateTime == null) dateTime = LocalDateTime.now();
 
         Page<Appointment> page;
@@ -114,13 +115,13 @@ public class AppointmentService {
         return interferingAppointments.size() > 0 && !interferingAppointments.get(0).getId().equals(appointment.getId());
     }
 
-    private CollectionResponse<AppointmentDTO> buildAppointmentResponse(Page<Appointment> page) {
-        List<AppointmentDTO> appointments = page.getContent()
+    private CollectionResponse<SimplifiedAppointmentDTO> buildAppointmentResponse(Page<Appointment> page) {
+        List<SimplifiedAppointmentDTO> appointments = page.getContent()
                 .stream()
-                .map(appointment -> modelMapper.map(appointment, AppointmentDTO.class))
+                .map(appointment -> modelMapper.map(appointment, SimplifiedAppointmentDTO.class))
                 .toList();
 
-        return CollectionResponse.<AppointmentDTO>builder()
+        return CollectionResponse.<SimplifiedAppointmentDTO>builder()
                 .content(appointments)
                 .pageNumber(page.getNumber())
                 .pageSize(page.getSize())

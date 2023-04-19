@@ -1,6 +1,6 @@
 package com.das.controllers;
 
-import com.das.DTOs.AppointmentDTO;
+import com.das.DTOs.SimplifiedAppointmentDTO;
 import com.das.entities.Patient;
 import com.das.requests.PatientRequest;
 import com.das.responses.CollectionResponse;
@@ -59,12 +59,12 @@ public class PatientController implements SecuredController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'EMPLOYEE')")
     @GetMapping("{id}/appointments")
-    public ResponseEntity<CollectionResponse<AppointmentDTO>> getPatientAppointments(
+    public ResponseEntity<CollectionResponse<SimplifiedAppointmentDTO>> getPatientAppointments(
             @PathVariable Integer id,
             @RequestParam(value = "dateTime", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime dateTime,
             @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
             Pageable pageable) {
-        CollectionResponse<AppointmentDTO> response = appointmentService.getAppointmentsByPatientId(id, dateTime, showPreceding, pageable);
+        CollectionResponse<SimplifiedAppointmentDTO> response = appointmentService.getAppointmentsByPatientId(id, dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

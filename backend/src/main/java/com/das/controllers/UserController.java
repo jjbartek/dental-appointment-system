@@ -1,6 +1,7 @@
 package com.das.controllers;
 
 import com.das.DTOs.AppointmentDTO;
+import com.das.DTOs.SimplifiedAppointmentDTO;
 import com.das.DTOs.UserDTO;
 import com.das.requests.UserCreateRequest;
 import com.das.requests.UserUpdateRequest;
@@ -65,12 +66,12 @@ public class UserController implements SecuredController {
 
     @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST', 'EMPLOYEE')")
     @GetMapping("{id}/appointments")
-    public ResponseEntity<CollectionResponse<AppointmentDTO>> getEmployeeAppointments(
+    public ResponseEntity<CollectionResponse<SimplifiedAppointmentDTO>> getEmployeeAppointments(
             @PathVariable Integer id,
             @RequestParam(value = "dateTime", required = false) LocalDateTime dateTime,
             @RequestParam(value = "showPreceding", required = false, defaultValue = "false") boolean showPreceding,
             Pageable pageable) {
-        CollectionResponse<AppointmentDTO> response = appointmentService.getAppointmentsByEmployeeId(id, dateTime, showPreceding, pageable);
+        CollectionResponse<SimplifiedAppointmentDTO> response = appointmentService.getAppointmentsByEmployeeId(id, dateTime, showPreceding, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }
