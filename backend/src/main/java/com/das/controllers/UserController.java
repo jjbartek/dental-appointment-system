@@ -1,6 +1,5 @@
 package com.das.controllers;
 
-import com.das.DTOs.AppointmentDTO;
 import com.das.DTOs.SimplifiedAppointmentDTO;
 import com.das.DTOs.UserDTO;
 import com.das.requests.UserCreateRequest;
@@ -20,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("users")
 @AllArgsConstructor
 @Tag(name = "User")
 public class UserController implements SecuredController {
