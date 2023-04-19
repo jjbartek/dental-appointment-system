@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("appointments")
+@RequestMapping("/api/v1/appointments")
 @RequiredArgsConstructor
 @Tag(name = "Appointment")
 @PreAuthorize("hasAnyRole('ADMIN', 'RECEPTIONIST')")

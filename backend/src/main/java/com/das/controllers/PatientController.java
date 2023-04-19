@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @RestController
-@RequestMapping("patients")
+@RequestMapping("/api/v1/patients")
 @RequiredArgsConstructor
 @Tag(name = "Patient")
 public class PatientController implements SecuredController {

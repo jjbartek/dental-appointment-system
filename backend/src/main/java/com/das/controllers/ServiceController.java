@@ -13,7 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("services")
+@RequestMapping("/api/v1/services")
 @RequiredArgsConstructor
 @Tag(name = "Service")
 public class ServiceController implements SecuredController {
