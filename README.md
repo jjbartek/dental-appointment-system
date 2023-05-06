@@ -8,11 +8,20 @@ Dental Appointment System is a REST API application that is currently in develop
  * Administration of staff and available services,
  * JWT authentication,
  * Swagger API Documentation
-
-User roles determine their access to the API:
+ 
+ User roles determine their access to the API:
  - ADMIN - manages employees, services (+ same as RECEPTIONIST)
  - RECEPTIONIST - manages patients, appointments
  - EMPLOYEE - can view visits, patients and their treatment histories
+ 
+🚧 Currently working on:
+ * Unit/integration tests
+ 
+🎆 To be implemented:
+ * Account registration for patients,
+ * Self-registration for dental appointments 
+
+
 
 ## 🛠️Stack
 ![Java, Spring, Hibernate, Mysql](https://skillicons.dev/icons?i=java,spring,hibernate,mysql)
