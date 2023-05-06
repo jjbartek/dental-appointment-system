@@ -19,6 +19,7 @@ User roles determine their access to the API:
 ## ▶ Run
 1. Setup MySQL database and update variables in **application.properties**
 2. Open the project in your IDE and run **DASApplication.java**
+3. You can access API documentation at localhost:8080/api/v1/swagger-ui/index.html
 
 ## 📄Documentation preview
 ![Swagger documentation preview](https://i.imgur.com/E7jfAVP.png)
