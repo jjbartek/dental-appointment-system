@@ -50,4 +50,13 @@ public class Patient {
     @Column(name = "gender", nullable = false)
     @NotNull(message = "Gender cannot be null")
     private Gender gender;
+
+    public Patient(String name, String phoneNumber, String email, String address, LocalDate dateOfBirth, Gender gender) {
+        this.name = name;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+        this.address = address;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
 }

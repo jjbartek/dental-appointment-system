@@ -33,4 +33,10 @@ public class Service {
     @Min(value = 1, message = "Service duration must be greater than 0")
     @NotNull(message = "Duration cannot be null")
     private Integer duration;
+
+    public Service(String name, BigDecimal minPrice, Integer duration) {
+        this.name = name;
+        this.minPrice = minPrice;
+        this.duration = duration;
+    }
 }

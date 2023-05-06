@@ -53,6 +53,13 @@ public class User implements UserDetails {
         this.password = password;
     }
 
+    public User(String name, String email, String password, List<Role> roles) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.roles = roles;
+    }
+
     public boolean hasRole(Role role) {
         return roles.contains(role);
     }

@@ -73,4 +73,14 @@ public class Appointment {
     @Digits(integer = 6, fraction = 2)
     private BigDecimal total;
 
+    public Appointment(User employee, Patient patient, LocalDateTime startTime, LocalDateTime endTime, String notes, Status status, List<Service> services, BigDecimal total) {
+        this.employee = employee;
+        this.patient = patient;
+        this.startTime = startTime;
+        this.endTime = endTime;
+        this.notes = notes;
+        this.status = status;
+        this.services = services;
+        this.total = total;
+    }
 }
