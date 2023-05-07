@@ -34,7 +34,7 @@ public class UserService {
     }
 
     public CollectionResponse<UserDTO> getUsersByNameOrEmail(String nameOrEmail, Pageable p) {
-        Page<User> page = userRepository.findByEmailOrName(nameOrEmail, nameOrEmail, p);
+        Page<User> page = userRepository.findByEmailOrName(nameOrEmail, p);
 
         return getResponseFromPage(page);
     }
