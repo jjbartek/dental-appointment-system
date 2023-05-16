@@ -41,7 +41,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                     .requestMatchers("/api/v1/auth/**", "/error")
                     .permitAll()
-                .requestMatchers(SWAGGER_WHITELIST)
+                    .requestMatchers(SWAGGER_WHITELIST)
                     .permitAll()
                 .anyRequest()
                     .authenticated()
