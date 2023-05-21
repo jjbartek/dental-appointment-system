@@ -79,22 +79,25 @@ class UserServiceTest {
         //given
         String email = "user1@gmail.com";
         String password = "password";
+        String hashedPassword = "hashedPassword";
         UserCreateRequest userCreateRequest =
                 new UserCreateRequest("User 1", email, password, List.of("EMPLOYEE"));
 
-        User mappedUser = new User("User 1", email, "hashedPassword", List.of(Role.EMPLOYEE));
-        User createdUser = new User(1, "User 1", email, "hashedPassword", List.of(Role.EMPLOYEE));
+        User mappedUser = new User("User 1", email, hashedPassword, List.of(Role.EMPLOYEE));
+        User createdUser = new User(1, "User 1", email, hashedPassword, List.of(Role.EMPLOYEE));
         UserDTO userDTO = new UserDTO(1, "User 1", email, List.of(Role.EMPLOYEE));
+        ArgumentCaptor<UserCreateRequest> capturedRequest = ArgumentCaptor.forClass(UserCreateRequest.class);
 
         //when
         when(userRepository.existsByEmail(eq(email))).thenReturn(false);
-        when(passwordEncoder.encode(eq(password))).thenReturn("hashedPassword");
-        when(modelMapper.map(eq(userCreateRequest), eq(User.class))).thenReturn(mappedUser);
+        when(passwordEncoder.encode(eq(password))).thenReturn(hashedPassword);
+        when(modelMapper.map(capturedRequest.capture(), eq(User.class))).thenReturn(mappedUser);
         when(userRepository.save(eq(mappedUser))).thenReturn(createdUser);
         when(modelMapper.map(eq(createdUser), eq(UserDTO.class))).thenReturn(userDTO);
         UserDTO userDTOResponse = underTest.addUser(userCreateRequest);
 
         //then
+        assertThat(capturedRequest.getValue().getPassword()).isEqualTo(hashedPassword);
         assertThat(userDTOResponse).isEqualTo(userDTO);
     }
 
