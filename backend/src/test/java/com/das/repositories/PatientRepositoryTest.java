@@ -1,7 +1,8 @@
 package com.das.repositories;
 
-import com.das.entities.Gender;
-import com.das.entities.Patient;
+import com.das.common.controllers.Gender;
+import com.das.patients.Patient;
+import com.das.patients.PatientRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

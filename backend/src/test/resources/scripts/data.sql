@@ -1,11 +1,11 @@
 INSERT INTO users (id, email, username, password)
 VALUES (1, 'Edward Smith', 'edward.smith@gmail.com', 'password');
-INSERT INTO users_roles (user_id, role)
+INSERT INTO users_roles (user_id, userRole)
     VALUES (1, 'EMPLOYEE');
 
 INSERT INTO users (id, email, username, password)
     VALUES (2, 'Jon Snow', 'jon.snow@gmail.com', 'password');
-INSERT INTO users_roles (user_id, role)
+INSERT INTO users_roles (user_id, userRole)
     VALUES (2, 'EMPLOYEE');
 
 INSERT INTO patients (id, address, date_of_birth, email, patient_name, phone_number, gender)

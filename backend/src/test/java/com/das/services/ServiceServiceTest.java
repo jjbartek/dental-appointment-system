@@ -1,9 +1,6 @@
 package com.das.services;
 
-import com.das.entities.Service;
-import com.das.exceptions.ResourceNotFoundException;
-import com.das.repositories.ServiceRepository;
-import com.das.requests.ServiceRequest;
+import com.das.common.exceptions.ResourceNotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
